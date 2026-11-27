@@ -92,10 +92,11 @@ def test_date_callback_accepts_date_objects_and_junk(sample):
     assert callback("not a date") == ("not a date", "")
 
 
-@pytest.mark.parametrize("case", _golden("checksum"), ids=lambda c: c["input"]["value"])
-def test_checksum_callback_matches_php(sample, case):
+def test_checksum_callback_keeps_hex_checksums(sample):
+    # Deliberately differs from the PHP sample, which still assumed BIGINT
+    # checksums and converted them with dec2hex (see install.sql: CHAR(32)).
     callback = sample.reports["slow_query_log"].callbacks["table"]["checksum"]
-    assert list(callback(case["input"]["value"])) == case["expected"]
+    assert callback("0123456789ABCDEF0123456789ABCDEF") == ("0123456789ABCDEF0123456789ABCDEF",)
 
 
 @pytest.mark.parametrize("case", _golden("explain"), ids=lambda c: str(c["input"]["value"]))
@@ -170,3 +171,9 @@ def test_relative_time():
 def test_invalid_config(tmp_path, change, message):
     with pytest.raises(ConfigError, match=message):
         load_config(_write(tmp_path, change(MINIMAL)))
+
+
+def test_defaults_are_copies(sample):
+    first = sample.defaults("graph_defaults", "slow_query_log")
+    first["table_fields"].append("changed")
+    assert sample.defaults("graph_defaults", "slow_query_log")["table_fields"] == ["minute_ts"]

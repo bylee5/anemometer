@@ -78,3 +78,11 @@ def test_copies_are_independent():
     params.set("a", "2")
     assert query == {"a": "1"}
     assert params.query == {"a": "2"}
+
+
+def test_set_copies_lists():
+    defaults = ["a"]
+    params = RequestVars()
+    params.set("fields", defaults)
+    params.append("fields", "b")
+    assert defaults == ["a"]

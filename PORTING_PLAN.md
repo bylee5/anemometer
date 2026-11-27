@@ -261,3 +261,13 @@ URL 구조(`index.php?action=report&datasource=...&table_fields[]=...`)는 **그
 3. **`nav_sub.php`의 기준본:** 현재 파일
 4. **Python 버전과 배포 환경:** Python 3.9 이상, Linux(gunicorn) 배포를 가정했다.
 5. **`performance_schema` 데이터소스 사용 여부:** 그대로 이식
+
+---
+
+## 6. 진행 상황 (2026-11-27)
+
+단계 0~10 완료. 코드는 `rewrite/`에 있고, 실행·테스트 방법과 PHP 버전과의 차이는 [rewrite/README.md](rewrite/README.md)에 정리했다.
+
+- 검증: PHP 원본을 Docker에서 실행해 기록한 기준 데이터와 비교한다. 모듈 단위 비교에 더해, 원본 `index.php` 전체와 Python 앱에 같은 요청 18건을 보내 응답을 비교한다(`tests/test_e2e.py`, 공백과 현재 시각 타임스탬프만 정규화).
+- 남은 일: 단계 11(병행 운영·전환). 운영 설정(`conf/config.inc.php`)을 `rewrite/conf/config.py`로 옮기고, 비밀번호는 환경 변수로 분리해야 한다.
+- 이식하면서 고치지 않은 문제(결정 1): HTML 이스케이프 없음, 검색 값의 SQL 직접 삽입.

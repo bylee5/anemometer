@@ -11,6 +11,7 @@ this request".
 
 from __future__ import annotations
 
+import copy
 import importlib.util
 from collections.abc import Mapping, Sequence
 from dataclasses import dataclass, field
@@ -119,7 +120,11 @@ class AppConfig:
         chosen = by_source.get(source_type or DEFAULT_SOURCE_TYPE)
         if chosen is None:
             chosen = by_source.get(DEFAULT_SOURCE_TYPE, {})
-        return {key: value() if callable(value) else value for key, value in chosen.items()}
+        # Copies, so that request handling can't modify the configuration.
+        return {
+            key: value() if callable(value) else copy.deepcopy(value)
+            for key, value in chosen.items()
+        }
 
 
 def _require(settings: Mapping[str, Any], name: str, where: str) -> Any:

@@ -11,6 +11,7 @@ becomes ``{"table_fields": ["a", "b"]}``.
 
 from __future__ import annotations
 
+import copy
 import re
 from collections.abc import Iterable, Mapping
 from typing import Any
@@ -125,8 +126,11 @@ class RequestVars:
         return default
 
     def set(self, name: str, value: Any) -> None:
-        """Set a query parameter (form values with the same name still take precedence)."""
-        self._query[name] = value
+        """Set a query parameter (form values with the same name still take precedence).
+
+        Lists and dicts are copied, like PHP arrays on assignment.
+        """
+        self._query[name] = copy.deepcopy(value)
 
     def append(self, name: str, value: Any) -> None:
         """Append to a list-valued query parameter, creating it if needed."""

@@ -11,7 +11,6 @@ import os
 from datetime import date, datetime
 
 from anemometer.config import relative_time
-from anemometer.util.hexconv import dec2hex
 
 # ---------------------------------------------------------------------------
 # Datasources
@@ -295,7 +294,10 @@ REPORTS = {
         "callbacks": {
             "table": {
                 "date": weekend_marker,
-                "checksum": lambda value: (dec2hex(value), ""),
+                # Checksums are CHAR(32) hex strings in this schema (install.sql), so
+                # they are shown as they are. (Upstream converted BIGINT checksums
+                # with dec2hex here.)
+                "checksum": lambda value: (value,),
             },
         },
     },
