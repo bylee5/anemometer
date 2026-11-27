@@ -177,3 +177,8 @@ def test_defaults_are_copies(sample):
     first = sample.defaults("graph_defaults", "slow_query_log")
     first["table_fields"].append("changed")
     assert sample.defaults("graph_defaults", "slow_query_log")["table_fields"] == ["minute_ts"]
+
+
+def test_private_module_names_are_ignored(tmp_path):
+    config = load_config(_write(tmp_path, MINIMAL + "\n_SERVER = {'host': 'x'}\n"))
+    assert config.datasources["db"].host == "h"

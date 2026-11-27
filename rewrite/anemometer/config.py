@@ -149,7 +149,11 @@ def _datasource(name: str, values: Mapping[str, Any]) -> Datasource:
 
 
 def _from_module(module: ModuleType) -> AppConfig:
-    settings = {key.lower(): value for key, value in vars(module).items() if key.isupper()}
+    settings = {
+        key.lower(): value
+        for key, value in vars(module).items()
+        if key.isupper() and not key.startswith("_")  # _PRIVATE helpers are ignored
+    }
     known = {f for f in AppConfig.__dataclass_fields__}
     unknown = sorted(set(settings) - known)
     if unknown:
