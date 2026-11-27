@@ -20,7 +20,7 @@ start)
         # install.sql uses '0000-00-00' defaults, so run without strict/zero-date modes.
         docker run -d --name "$name" -p "$port:3306" \
             -e MYSQL_ROOT_PASSWORD="$password" \
-            "$image" --sql-mode="" --character-set-server=utf8mb4 >/dev/null
+            "$image" --sql-mode="" --character-set-server=utf8mb4 --skip-name-resolve >/dev/null
     fi
     for _ in $(seq 60); do
         if docker exec "$name" mysql -uroot -p"$password" -e 'SELECT 1' >/dev/null 2>&1; then
