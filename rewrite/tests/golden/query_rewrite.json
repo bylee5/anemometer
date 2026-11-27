@@ -1,0 +1,362 @@
+[
+    {
+        "input": "SELECT 123",
+        "expected": {
+            "normalized": "SELECT 123",
+            "type": 1,
+            "select": "SELECT 123",
+            "explain": "EXPLAIN SELECT 123",
+            "extended_explain": "EXPLAIN EXTENDED SELECT 123"
+        }
+    },
+    {
+        "input": "/* 123 * 456 */ SELECT 123 #214241*/",
+        "expected": {
+            "normalized": "SELECT 123",
+            "type": 1,
+            "select": "SELECT 123",
+            "explain": "EXPLAIN SELECT 123",
+            "extended_explain": "EXPLAIN EXTENDED SELECT 123"
+        }
+    },
+    {
+        "input": "\t\t    SELECT       \t\t\t   123\t\t\t    \t\t\t\n",
+        "expected": {
+            "normalized": "SELECT       \t\t\t   123",
+            "type": 1,
+            "select": "SELECT       \t\t\t   123",
+            "explain": "EXPLAIN SELECT       \t\t\t   123",
+            "extended_explain": "EXPLAIN EXTENDED SELECT       \t\t\t   123"
+        }
+    },
+    {
+        "input": "/* Script : /home/site/XXXXXXXXXX.php Utilisateur : prod_outils */ SELECT SQL_SMALL_RESULT DISTINCT ID_CLIENT\nFROM DB.CLIENT CL\nWHERE CL.TELEPHONE = '0000000000'\nLIMIT 1\n",
+        "expected": {
+            "normalized": "SELECT SQL_SMALL_RESULT DISTINCT ID_CLIENT FROM DB.CLIENT CL WHERE CL.TELEPHONE = '0000000000' LIMIT 1",
+            "type": 1,
+            "select": "SELECT SQL_SMALL_RESULT DISTINCT ID_CLIENT FROM DB.CLIENT CL WHERE CL.TELEPHONE = '0000000000' LIMIT 1",
+            "explain": "EXPLAIN SELECT SQL_SMALL_RESULT DISTINCT ID_CLIENT FROM DB.CLIENT CL WHERE CL.TELEPHONE = '0000000000' LIMIT 1",
+            "extended_explain": "EXPLAIN EXTENDED SELECT SQL_SMALL_RESULT DISTINCT ID_CLIENT FROM DB.CLIENT CL WHERE CL.TELEPHONE = '0000000000' LIMIT 1"
+        }
+    },
+    {
+        "input": "SELECT id FROM ips WHERE ip='192.168.0.1' AND type=1 LIMIT 1",
+        "expected": {
+            "normalized": "SELECT id FROM ips WHERE ip='192.168.0.1' AND type=1 LIMIT 1",
+            "type": 1,
+            "select": "SELECT id FROM ips WHERE ip='192.168.0.1' AND type=1 LIMIT 1",
+            "explain": "EXPLAIN SELECT id FROM ips WHERE ip='192.168.0.1' AND type=1 LIMIT 1",
+            "extended_explain": "EXPLAIN EXTENDED SELECT id FROM ips WHERE ip='192.168.0.1' AND type=1 LIMIT 1"
+        }
+    },
+    {
+        "input": "INSERT INTO tbl_old(\nSELECT * \nFROM tbl\nWHERE id =123 )",
+        "expected": {
+            "normalized": "INSERT INTO tbl_old( SELECT *  FROM tbl WHERE id =123 )",
+            "type": 10,
+            "select": "SELECT *  FROM tbl WHERE id =123",
+            "explain": "EXPLAIN SELECT *  FROM tbl WHERE id =123",
+            "extended_explain": "EXPLAIN EXTENDED SELECT *  FROM tbl WHERE id =123"
+        }
+    },
+    {
+        "input": "DELETE FROM table WHERE id = 123",
+        "expected": {
+            "normalized": "DELETE FROM table WHERE id = 123",
+            "type": 2,
+            "select": "SELECT 0 FROM table WHERE id = 123",
+            "explain": "EXPLAIN SELECT 0 FROM table WHERE id = 123",
+            "extended_explain": "EXPLAIN EXTENDED SELECT 0 FROM table WHERE id = 123"
+        }
+    },
+    {
+        "input": "INSERT INTO table (col1, col2, col3) VALUES (1, 2, 3), (4, 5, 6)",
+        "expected": {
+            "normalized": "INSERT INTO table (col1, col2, col3) VALUES (1, 2, 3), (4, 5, 6)",
+            "type": 3,
+            "select": null,
+            "explain": null,
+            "extended_explain": null
+        }
+    },
+    {
+        "input": "INSERT INTO table SELECT * FROM table2",
+        "expected": {
+            "normalized": "INSERT INTO table SELECT * FROM table2",
+            "type": 10,
+            "select": "SELECT * FROM table2",
+            "explain": "EXPLAIN SELECT * FROM table2",
+            "extended_explain": "EXPLAIN EXTENDED SELECT * FROM table2"
+        }
+    },
+    {
+        "input": "INSERT INTO table (SELECT * FROM table2)",
+        "expected": {
+            "normalized": "INSERT INTO table (SELECT * FROM table2)",
+            "type": 10,
+            "select": "SELECT * FROM table2",
+            "explain": "EXPLAIN SELECT * FROM table2",
+            "extended_explain": "EXPLAIN EXTENDED SELECT * FROM table2"
+        }
+    },
+    {
+        "input": "UPDATE table SET col1 = 123 WHERE id = 456",
+        "expected": {
+            "normalized": "UPDATE table SET col1 = 123 WHERE id = 456",
+            "type": 4,
+            "select": "SELECT col1 = 123 FROM table WHERE id = 456",
+            "explain": "EXPLAIN SELECT col1 = 123 FROM table WHERE id = 456",
+            "extended_explain": "EXPLAIN EXTENDED SELECT col1 = 123 FROM table WHERE id = 456"
+        }
+    },
+    {
+        "input": "ALTER TABLE MODIFY col1 INT NOT NULL DEFAULT 0",
+        "expected": {
+            "normalized": "ALTER TABLE MODIFY col1 INT NOT NULL DEFAULT 0",
+            "type": 5,
+            "select": null,
+            "explain": null,
+            "extended_explain": null
+        }
+    },
+    {
+        "input": "DROP TABLE table",
+        "expected": {
+            "normalized": "DROP TABLE table",
+            "type": 6,
+            "select": null,
+            "explain": null,
+            "extended_explain": null
+        }
+    },
+    {
+        "input": "CREATE TABLE table (id INT)",
+        "expected": {
+            "normalized": "CREATE TABLE table (id INT)",
+            "type": 7,
+            "select": null,
+            "explain": null,
+            "extended_explain": null
+        }
+    },
+    {
+        "input": "DELETE table1 FROM table1 JOIN table2 ON table1.id = table2.id WHERE table1.col1 = 123 AND table2.col2 = 456 ",
+        "expected": {
+            "normalized": "DELETE table1 FROM table1 JOIN table2 ON table1.id = table2.id WHERE table1.col1 = 123 AND table2.col2 = 456",
+            "type": 8,
+            "select": "SELECT 0 FROM table1 JOIN table2 ON table1.id = table2.id WHERE table1.col1 = 123 AND table2.col2 = 456",
+            "explain": "EXPLAIN SELECT 0 FROM table1 JOIN table2 ON table1.id = table2.id WHERE table1.col1 = 123 AND table2.col2 = 456",
+            "extended_explain": "EXPLAIN EXTENDED SELECT 0 FROM table1 JOIN table2 ON table1.id = table2.id WHERE table1.col1 = 123 AND table2.col2 = 456"
+        }
+    },
+    {
+        "input": "(SELECT 123) UNION (SELECT 456)",
+        "expected": {
+            "normalized": "(SELECT 123) UNION (SELECT 456)",
+            "type": 9,
+            "select": "(SELECT 123) UNION (SELECT 456)",
+            "explain": "EXPLAIN (SELECT 123) UNION (SELECT 456)",
+            "extended_explain": "EXPLAIN EXTENDED (SELECT 123) UNION (SELECT 456)"
+        }
+    },
+    {
+        "input": "select lower_case from t",
+        "expected": {
+            "normalized": "select lower_case from t",
+            "type": 1,
+            "select": "select lower_case from t",
+            "explain": "EXPLAIN select lower_case from t",
+            "extended_explain": "EXPLAIN EXTENDED select lower_case from t"
+        }
+    },
+    {
+        "input": "UPDATE t SET a = 1",
+        "expected": {
+            "normalized": "UPDATE t SET a = 1",
+            "type": 4,
+            "select": "SELECT  FROM  WHERE",
+            "explain": "EXPLAIN SELECT  FROM  WHERE",
+            "extended_explain": "EXPLAIN EXTENDED SELECT  FROM  WHERE"
+        }
+    },
+    {
+        "input": "UPDATE t SET a = 1\nWHERE b = 2\r\n",
+        "expected": {
+            "normalized": "UPDATE t SET a = 1 WHERE b = 2",
+            "type": 4,
+            "select": "SELECT a = 1 FROM t WHERE b = 2",
+            "explain": "EXPLAIN SELECT a = 1 FROM t WHERE b = 2",
+            "extended_explain": "EXPLAIN EXTENDED SELECT a = 1 FROM t WHERE b = 2"
+        }
+    },
+    {
+        "input": "insert into t (select * from s)",
+        "expected": {
+            "normalized": "insert into t (select * from s)",
+            "type": 10,
+            "select": "",
+            "explain": "EXPLAIN ",
+            "extended_explain": "EXPLAIN EXTENDED "
+        }
+    },
+    {
+        "input": "insert into t select * from s",
+        "expected": {
+            "normalized": "insert into t select * from s",
+            "type": 10,
+            "select": "select * from s",
+            "explain": "EXPLAIN select * from s",
+            "extended_explain": "EXPLAIN EXTENDED select * from s"
+        }
+    },
+    {
+        "input": "INSERT INTO `db`.`t` SELECT 1",
+        "expected": {
+            "normalized": "INSERT INTO `db`.`t` SELECT 1",
+            "type": 10,
+            "select": "",
+            "explain": "EXPLAIN ",
+            "extended_explain": "EXPLAIN EXTENDED "
+        }
+    },
+    {
+        "input": "DELETE `db`.`t1` FROM t1 WHERE 1",
+        "expected": {
+            "normalized": "DELETE `db`.`t1` FROM t1 WHERE 1",
+            "type": 8,
+            "select": "SELECT 0 FROM t1 WHERE 1",
+            "explain": "EXPLAIN SELECT 0 FROM t1 WHERE 1",
+            "extended_explain": "EXPLAIN EXTENDED SELECT 0 FROM t1 WHERE 1"
+        }
+    },
+    {
+        "input": "SELECT 1 -- trailing comment",
+        "expected": {
+            "normalized": "SELECT 1",
+            "type": 1,
+            "select": "SELECT 1",
+            "explain": "EXPLAIN SELECT 1",
+            "extended_explain": "EXPLAIN EXTENDED SELECT 1"
+        }
+    },
+    {
+        "input": "SELECT 1 # hash\nFROM dual",
+        "expected": {
+            "normalized": "SELECT 1 # hash FROM dual",
+            "type": 1,
+            "select": "SELECT 1 # hash FROM dual",
+            "explain": "EXPLAIN SELECT 1 # hash FROM dual",
+            "extended_explain": "EXPLAIN EXTENDED SELECT 1 # hash FROM dual"
+        }
+    },
+    {
+        "input": "SELECT 1\n-- not last line\nFROM dual",
+        "expected": {
+            "normalized": "SELECT 1 -- not last line FROM dual",
+            "type": 1,
+            "select": "SELECT 1 -- not last line FROM dual",
+            "explain": "EXPLAIN SELECT 1 -- not last line FROM dual",
+            "extended_explain": "EXPLAIN EXTENDED SELECT 1 -- not last line FROM dual"
+        }
+    },
+    {
+        "input": "SELECT /* inline */ a, /* two */ b FROM t",
+        "expected": {
+            "normalized": "SELECTa,b FROM t",
+            "type": 0,
+            "select": null,
+            "explain": null,
+            "extended_explain": null
+        }
+    },
+    {
+        "input": "SELECT * FROM 한글테이블 WHERE 이름 = '값'",
+        "expected": {
+            "normalized": "SELECT * FROM 한글테이블 WHERE 이름 = '값'",
+            "type": 1,
+            "select": "SELECT * FROM 한글테이블 WHERE 이름 = '값'",
+            "explain": "EXPLAIN SELECT * FROM 한글테이블 WHERE 이름 = '값'",
+            "extended_explain": "EXPLAIN EXTENDED SELECT * FROM 한글테이블 WHERE 이름 = '값'"
+        }
+    },
+    {
+        "input": "SHOW TABLES",
+        "expected": {
+            "normalized": "SHOW TABLES",
+            "type": 0,
+            "select": null,
+            "explain": null,
+            "extended_explain": null
+        }
+    },
+    {
+        "input": "",
+        "expected": {
+            "normalized": "",
+            "type": 0,
+            "select": null,
+            "explain": null,
+            "extended_explain": null
+        }
+    },
+    {
+        "input": "   ",
+        "expected": {
+            "normalized": "",
+            "type": 0,
+            "select": null,
+            "explain": null,
+            "extended_explain": null
+        }
+    },
+    {
+        "input": "SELECT\u000b1\u0000",
+        "expected": {
+            "normalized": "SELECT\u000b1",
+            "type": 1,
+            "select": "SELECT\u000b1",
+            "explain": "EXPLAIN SELECT\u000b1",
+            "extended_explain": "EXPLAIN EXTENDED SELECT\u000b1"
+        }
+    },
+    {
+        "input": "REPLACE INTO t VALUES (1)",
+        "expected": {
+            "normalized": "REPLACE INTO t VALUES (1)",
+            "type": 0,
+            "select": null,
+            "explain": null,
+            "extended_explain": null
+        }
+    },
+    {
+        "input": "SELECT a FROM t WHERE x IN (SELECT y FROM u UNION SELECT z FROM v)",
+        "expected": {
+            "normalized": "SELECT a FROM t WHERE x IN (SELECT y FROM u UNION SELECT z FROM v)",
+            "type": 1,
+            "select": "SELECT a FROM t WHERE x IN (SELECT y FROM u UNION SELECT z FROM v)",
+            "explain": "EXPLAIN SELECT a FROM t WHERE x IN (SELECT y FROM u UNION SELECT z FROM v)",
+            "extended_explain": "EXPLAIN EXTENDED SELECT a FROM t WHERE x IN (SELECT y FROM u UNION SELECT z FROM v)"
+        }
+    },
+    {
+        "input": "WITH cte AS (SELECT 1) SELECT * FROM cte UNION SELECT 2",
+        "expected": {
+            "normalized": "WITH cte AS (SELECT 1) SELECT * FROM cte UNION SELECT 2",
+            "type": 9,
+            "select": "WITH cte AS (SELECT 1) SELECT * FROM cte UNION SELECT 2",
+            "explain": "EXPLAIN WITH cte AS (SELECT 1) SELECT * FROM cte UNION SELECT 2",
+            "extended_explain": "EXPLAIN EXTENDED WITH cte AS (SELECT 1) SELECT * FROM cte UNION SELECT 2"
+        }
+    },
+    {
+        "input": null,
+        "expected": {
+            "normalized": null,
+            "type": 0,
+            "select": null,
+            "explain": null,
+            "extended_explain": null
+        }
+    }
+]

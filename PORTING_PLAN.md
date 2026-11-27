@@ -120,7 +120,11 @@ conf/config.inc.php ──► Helpers.dec2hex (콜백 안에서) ┘
 
 ## 3. 목표 패키지 구조
 
+Python 코드는 전부 저장소의 `rewrite/` 폴더 아래에 둔다. 아래 경로는 `rewrite/` 기준이다.
+
 ```
+pyproject.toml
+tools/golden/           ← PHP 원본을 Docker에서 실행해 기준 데이터를 만드는 스크립트
 anemometer/
   __init__.py
   sql/
