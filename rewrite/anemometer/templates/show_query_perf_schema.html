@@ -1,0 +1,80 @@
+<p><center><h2><a href="{{ site_url ~ ('?action=show_query&datasource=' ~ datasource ~ '&checksum=' ~ checksum) }}">Query {{ checksum }}</a></h2></center></p>
+
+<div class="row">
+	<div class="span4 offset3"><strong>First Seen</strong>: {{ row['FIRST_SEEN'] if row['FIRST_SEEN'] is defined and row['FIRST_SEEN'] is not none else row['first_seen'] }}</div>
+	<div class="span4"><strong>Last Seen</strong>: {{ row['LAST_SEEN'] if row['LAST_SEEN'] is defined and row['LAST_SEEN'] is not none else row['last_seen'] }}</div>
+</div>
+
+<hr>
+      
+	<div class="row">
+		<div class="span12">
+			<strong>Fingerprint</strong><br>
+			<pre class="prettyprint lang-sql">{{ row[fingerprint_field_name] }}</pre>
+		</div>
+	</div>
+	<hr>    
+    
+        
+		{% if (create_table is defined and create_table is not none) and create_table|php_filled %}
+            <div class="accordion-group">
+              <div class="accordion-heading">
+                <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseThree">
+                  Create Table Statements
+                </a>
+              </div>
+              <div id="collapseThree" class="accordion-body collapse">
+                <div class="accordion-inner">
+                  <pre class="prettyprint lang-sql">{{ create_table }}</pre>
+                </div>
+              </div>
+            </div>
+		{% endif %}
+
+		{% if (table_status is defined and table_status is not none) and table_status|php_filled %}
+			<div class="accordion-group">
+              <div class="accordion-heading">
+                <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseFour">
+                  Table Status
+                </a>
+              </div>
+              <div id="collapseFour" class="accordion-body collapse">
+                <div class="accordion-inner">
+                  <pre>{{ table_status }}</pre>
+                </div>
+              </div>
+            </div>
+
+		{% endif %}
+          </div>
+			<!-- </div> -->
+		</div>
+	</div>
+
+<p><center><h2>Current Statistics</h2></center>
+
+<script>
+	$(function() {
+	//	$("#dimension-ts_min_start").datetimepicker({ dateFormat: 'yy-mm-dd', timeFormat: 'hh:mm:ss' });
+	// $("#dimension-ts_min_end").datetimepicker({ dateFormat: 'yy-mm-dd', timeFormat: 'hh:mm:ss' });
+		$('.combobox').combobox();
+		prettyPrint();
+
+        {% if source_type != 'performance_schema' %}
+        
+		$('#graph').on('hidden', function () {
+			el = document.getElementById('graph-btn');
+			el.innerHTML = '<i class="icon-plus"></i> Show Graph Options'
+		});
+		$('#graph').on('show', function () {
+		  el = document.getElementById('graph-btn');
+		  el.innerHTML = '<i class="icon-minus"></i> Hide Graph Options'
+		});
+
+		show_graph = {{ 'true' if get_var('show_form')|php_truthy else 'false' }};
+		if (show_graph) {
+		  $("#graph-btn").trigger("click");
+		}
+        {% endif %}
+	});
+</script>

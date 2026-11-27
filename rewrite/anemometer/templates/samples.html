@@ -1,0 +1,48 @@
+<div class="row">
+	<div class="span12">
+	</div>
+</div>
+
+{% set limit = rpp_number if rpp_number < num_rows else num_rows %}
+
+<div class="row">
+	<div class="span4">
+	Displaying samples <strong>{{ start+1 }} - {{ start+limit }} </strong>
+	{% if (start is defined and start is not none) and start > 0 %} 
+		<a href="{{ site_url ~ ('?action=samples&datasource=' ~ datasource ~ '&checksum=' ~ checksum ~ '&rpp=' ~ rpp ~ '&start=') ~ (start - rpp_number) }}"class="btn">&larr; Newer</a>
+	{% endif %}
+	
+	  {% if num_rows > limit %} 
+		<a href="{{ site_url ~ ('?action=samples&datasource=' ~ datasource ~ '&checksum=' ~ checksum ~ '&rpp=' ~ rpp ~ '&start=') ~ (start + rpp_number) }}" class="btn">Older &rarr;</a>
+	  {% endif %}
+	</div>
+</div>
+<hr>
+
+{% for sample in samples[:limit] %}
+<div class="row">
+	<div class="span12">
+		<i class="icon-leaf"></i> <strong>Sample</strong> on host <strong>{{ sample['hostname_max'] }}</strong> at <strong>{{ sample['ts_max'] }}</strong>
+		<pre class="prettyprint lang-sql">{{ sample['sample'] }}</pre>
+	</div>
+</div>
+{% endfor %}
+<hr>
+	<div class="row">
+	<div class="span4">
+	Displaying samples <strong>{{ start+1 }} - {{ start+limit }} </strong>
+	{% if (start is defined and start is not none) and start > 0 %} 
+		<a href="{{ site_url ~ ('?action=samples&datasource=' ~ datasource ~ '&checksum=' ~ checksum ~ '&rpp=' ~ rpp ~ '&start=') ~ (start - rpp_number) }}"class="btn">&larr; Newer</a>
+	{% endif %}
+	
+	  {% if num_rows > limit %} 
+		<a href="{{ site_url ~ ('?action=samples&datasource=' ~ datasource ~ '&checksum=' ~ checksum ~ '&rpp=' ~ rpp ~ '&start=') ~ (start + rpp_number) }}" class="btn">Older &rarr;</a>
+	  {% endif %}
+	</div>
+</div>
+	
+<script>
+	$(function() {
+		prettyPrint();
+	});
+</script>
