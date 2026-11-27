@@ -1,0 +1,1234 @@
+[
+    {
+        "input": {
+            "now": "2024-03-31 12:34:56",
+            "expression": "now"
+        },
+        "expected": "2024-03-31 12:34:56"
+    },
+    {
+        "input": {
+            "now": "2024-03-31 12:34:56",
+            "expression": "NOW"
+        },
+        "expected": "2024-03-31 12:34:56"
+    },
+    {
+        "input": {
+            "now": "2024-03-31 12:34:56",
+            "expression": "nowhere"
+        },
+        "expected": "2024-03-31 12:34:56"
+    },
+    {
+        "input": {
+            "now": "2024-03-31 12:34:56",
+            "expression": "Now()"
+        },
+        "expected": "2024-03-31 12:34:56"
+    },
+    {
+        "input": {
+            "now": "2024-03-31 12:34:56",
+            "expression": "-1 month"
+        },
+        "expected": "2024-03-02 12:34:56"
+    },
+    {
+        "input": {
+            "now": "2024-03-31 12:34:56",
+            "expression": "+1 month"
+        },
+        "expected": "2024-05-01 12:34:56"
+    },
+    {
+        "input": {
+            "now": "2024-03-31 12:34:56",
+            "expression": "1 month"
+        },
+        "expected": "2024-05-01 12:34:56"
+    },
+    {
+        "input": {
+            "now": "2024-03-31 12:34:56",
+            "expression": "-1 months"
+        },
+        "expected": "2024-03-02 12:34:56"
+    },
+    {
+        "input": {
+            "now": "2024-03-31 12:34:56",
+            "expression": "-3 MONTH"
+        },
+        "expected": "2023-12-31 12:34:56"
+    },
+    {
+        "input": {
+            "now": "2024-03-31 12:34:56",
+            "expression": "-13 month"
+        },
+        "expected": "2023-03-03 12:34:56"
+    },
+    {
+        "input": {
+            "now": "2024-03-31 12:34:56",
+            "expression": "+12 months"
+        },
+        "expected": "2025-03-31 12:34:56"
+    },
+    {
+        "input": {
+            "now": "2024-03-31 12:34:56",
+            "expression": "-1 day"
+        },
+        "expected": "2024-03-30 12:34:56"
+    },
+    {
+        "input": {
+            "now": "2024-03-31 12:34:56",
+            "expression": "+1 days"
+        },
+        "expected": "2024-04-01 12:34:56"
+    },
+    {
+        "input": {
+            "now": "2024-03-31 12:34:56",
+            "expression": "-30 day"
+        },
+        "expected": "2024-03-01 12:34:56"
+    },
+    {
+        "input": {
+            "now": "2024-03-31 12:34:56",
+            "expression": "-1 week"
+        },
+        "expected": "2024-03-24 12:34:56"
+    },
+    {
+        "input": {
+            "now": "2024-03-31 12:34:56",
+            "expression": "-2 weeks"
+        },
+        "expected": "2024-03-17 12:34:56"
+    },
+    {
+        "input": {
+            "now": "2024-03-31 12:34:56",
+            "expression": "-1 fortnight"
+        },
+        "expected": "2024-03-17 12:34:56"
+    },
+    {
+        "input": {
+            "now": "2024-03-31 12:34:56",
+            "expression": "-1 hour"
+        },
+        "expected": "2024-03-31 11:34:56"
+    },
+    {
+        "input": {
+            "now": "2024-03-31 12:34:56",
+            "expression": "-24 hours"
+        },
+        "expected": "2024-03-30 12:34:56"
+    },
+    {
+        "input": {
+            "now": "2024-03-31 12:34:56",
+            "expression": "-90 min"
+        },
+        "expected": "2024-03-31 11:04:56"
+    },
+    {
+        "input": {
+            "now": "2024-03-31 12:34:56",
+            "expression": "-5 mins"
+        },
+        "expected": "2024-03-31 12:29:56"
+    },
+    {
+        "input": {
+            "now": "2024-03-31 12:34:56",
+            "expression": "-1 minute"
+        },
+        "expected": "2024-03-31 12:33:56"
+    },
+    {
+        "input": {
+            "now": "2024-03-31 12:34:56",
+            "expression": "-30 minutes"
+        },
+        "expected": "2024-03-31 12:04:56"
+    },
+    {
+        "input": {
+            "now": "2024-03-31 12:34:56",
+            "expression": "-10 sec"
+        },
+        "expected": "2024-03-31 12:34:46"
+    },
+    {
+        "input": {
+            "now": "2024-03-31 12:34:56",
+            "expression": "-10 secs"
+        },
+        "expected": "2024-03-31 12:34:46"
+    },
+    {
+        "input": {
+            "now": "2024-03-31 12:34:56",
+            "expression": "-1 second"
+        },
+        "expected": "2024-03-31 12:34:55"
+    },
+    {
+        "input": {
+            "now": "2024-03-31 12:34:56",
+            "expression": "-45 seconds"
+        },
+        "expected": "2024-03-31 12:34:11"
+    },
+    {
+        "input": {
+            "now": "2024-03-31 12:34:56",
+            "expression": "-1 year"
+        },
+        "expected": "2023-03-31 12:34:56"
+    },
+    {
+        "input": {
+            "now": "2024-03-31 12:34:56",
+            "expression": "+1 years"
+        },
+        "expected": "2025-03-31 12:34:56"
+    },
+    {
+        "input": {
+            "now": "2024-03-31 12:34:56",
+            "expression": "-4 year"
+        },
+        "expected": "2020-03-31 12:34:56"
+    },
+    {
+        "input": {
+            "now": "2024-03-31 12:34:56",
+            "expression": " -1 day"
+        },
+        "expected": "2024-03-30 12:34:56"
+    },
+    {
+        "input": {
+            "now": "2024-03-31 12:34:56",
+            "expression": "-1  day"
+        },
+        "expected": "-1  day"
+    },
+    {
+        "input": {
+            "now": "2024-03-31 12:34:56",
+            "expression": "- 1 day"
+        },
+        "expected": "- 1 day"
+    },
+    {
+        "input": {
+            "now": "2024-03-31 12:34:56",
+            "expression": "-1day"
+        },
+        "expected": "-1day"
+    },
+    {
+        "input": {
+            "now": "2024-03-31 12:34:56",
+            "expression": "-1 day ago"
+        },
+        "expected": "-1 day ago"
+    },
+    {
+        "input": {
+            "now": "2024-03-31 12:34:56",
+            "expression": "2024-01-01 00:00:00"
+        },
+        "expected": "2024-01-01 00:00:00"
+    },
+    {
+        "input": {
+            "now": "2024-03-31 12:34:56",
+            "expression": "2024-01-01"
+        },
+        "expected": "2024-01-01"
+    },
+    {
+        "input": {
+            "now": "2024-03-31 12:34:56",
+            "expression": ""
+        },
+        "expected": ""
+    },
+    {
+        "input": {
+            "now": "2024-03-31 12:34:56",
+            "expression": "yesterday"
+        },
+        "expected": "yesterday"
+    },
+    {
+        "input": {
+            "now": "2024-03-31 12:34:56",
+            "expression": "-1 foo"
+        },
+        "expected": "2024-03-31 22:34:56"
+    },
+    {
+        "input": {
+            "now": "2024-03-31 12:34:56",
+            "expression": "+1 monday"
+        },
+        "expected": "2024-04-01 00:00:00"
+    },
+    {
+        "input": {
+            "now": "2024-03-31 12:34:56",
+            "expression": "-1 weekday"
+        },
+        "expected": "2024-03-29 00:00:00"
+    },
+    {
+        "input": {
+            "now": "2024-03-31 12:34:56",
+            "expression": "-1 weekdays"
+        },
+        "expected": "2024-03-29 00:00:00"
+    },
+    {
+        "input": {
+            "now": "2024-03-31 12:34:56",
+            "expression": "-1 msec"
+        },
+        "expected": "2024-03-31 12:34:55"
+    },
+    {
+        "input": {
+            "now": "2024-02-29 00:00:00",
+            "expression": "now"
+        },
+        "expected": "2024-02-29 00:00:00"
+    },
+    {
+        "input": {
+            "now": "2024-02-29 00:00:00",
+            "expression": "NOW"
+        },
+        "expected": "2024-02-29 00:00:00"
+    },
+    {
+        "input": {
+            "now": "2024-02-29 00:00:00",
+            "expression": "nowhere"
+        },
+        "expected": "2024-02-29 00:00:00"
+    },
+    {
+        "input": {
+            "now": "2024-02-29 00:00:00",
+            "expression": "Now()"
+        },
+        "expected": "2024-02-29 00:00:00"
+    },
+    {
+        "input": {
+            "now": "2024-02-29 00:00:00",
+            "expression": "-1 month"
+        },
+        "expected": "2024-01-29 00:00:00"
+    },
+    {
+        "input": {
+            "now": "2024-02-29 00:00:00",
+            "expression": "+1 month"
+        },
+        "expected": "2024-03-29 00:00:00"
+    },
+    {
+        "input": {
+            "now": "2024-02-29 00:00:00",
+            "expression": "1 month"
+        },
+        "expected": "2024-03-29 00:00:00"
+    },
+    {
+        "input": {
+            "now": "2024-02-29 00:00:00",
+            "expression": "-1 months"
+        },
+        "expected": "2024-01-29 00:00:00"
+    },
+    {
+        "input": {
+            "now": "2024-02-29 00:00:00",
+            "expression": "-3 MONTH"
+        },
+        "expected": "2023-11-29 00:00:00"
+    },
+    {
+        "input": {
+            "now": "2024-02-29 00:00:00",
+            "expression": "-13 month"
+        },
+        "expected": "2023-01-29 00:00:00"
+    },
+    {
+        "input": {
+            "now": "2024-02-29 00:00:00",
+            "expression": "+12 months"
+        },
+        "expected": "2025-03-01 00:00:00"
+    },
+    {
+        "input": {
+            "now": "2024-02-29 00:00:00",
+            "expression": "-1 day"
+        },
+        "expected": "2024-02-28 00:00:00"
+    },
+    {
+        "input": {
+            "now": "2024-02-29 00:00:00",
+            "expression": "+1 days"
+        },
+        "expected": "2024-03-01 00:00:00"
+    },
+    {
+        "input": {
+            "now": "2024-02-29 00:00:00",
+            "expression": "-30 day"
+        },
+        "expected": "2024-01-30 00:00:00"
+    },
+    {
+        "input": {
+            "now": "2024-02-29 00:00:00",
+            "expression": "-1 week"
+        },
+        "expected": "2024-02-22 00:00:00"
+    },
+    {
+        "input": {
+            "now": "2024-02-29 00:00:00",
+            "expression": "-2 weeks"
+        },
+        "expected": "2024-02-15 00:00:00"
+    },
+    {
+        "input": {
+            "now": "2024-02-29 00:00:00",
+            "expression": "-1 fortnight"
+        },
+        "expected": "2024-02-15 00:00:00"
+    },
+    {
+        "input": {
+            "now": "2024-02-29 00:00:00",
+            "expression": "-1 hour"
+        },
+        "expected": "2024-02-28 23:00:00"
+    },
+    {
+        "input": {
+            "now": "2024-02-29 00:00:00",
+            "expression": "-24 hours"
+        },
+        "expected": "2024-02-28 00:00:00"
+    },
+    {
+        "input": {
+            "now": "2024-02-29 00:00:00",
+            "expression": "-90 min"
+        },
+        "expected": "2024-02-28 22:30:00"
+    },
+    {
+        "input": {
+            "now": "2024-02-29 00:00:00",
+            "expression": "-5 mins"
+        },
+        "expected": "2024-02-28 23:55:00"
+    },
+    {
+        "input": {
+            "now": "2024-02-29 00:00:00",
+            "expression": "-1 minute"
+        },
+        "expected": "2024-02-28 23:59:00"
+    },
+    {
+        "input": {
+            "now": "2024-02-29 00:00:00",
+            "expression": "-30 minutes"
+        },
+        "expected": "2024-02-28 23:30:00"
+    },
+    {
+        "input": {
+            "now": "2024-02-29 00:00:00",
+            "expression": "-10 sec"
+        },
+        "expected": "2024-02-28 23:59:50"
+    },
+    {
+        "input": {
+            "now": "2024-02-29 00:00:00",
+            "expression": "-10 secs"
+        },
+        "expected": "2024-02-28 23:59:50"
+    },
+    {
+        "input": {
+            "now": "2024-02-29 00:00:00",
+            "expression": "-1 second"
+        },
+        "expected": "2024-02-28 23:59:59"
+    },
+    {
+        "input": {
+            "now": "2024-02-29 00:00:00",
+            "expression": "-45 seconds"
+        },
+        "expected": "2024-02-28 23:59:15"
+    },
+    {
+        "input": {
+            "now": "2024-02-29 00:00:00",
+            "expression": "-1 year"
+        },
+        "expected": "2023-03-01 00:00:00"
+    },
+    {
+        "input": {
+            "now": "2024-02-29 00:00:00",
+            "expression": "+1 years"
+        },
+        "expected": "2025-03-01 00:00:00"
+    },
+    {
+        "input": {
+            "now": "2024-02-29 00:00:00",
+            "expression": "-4 year"
+        },
+        "expected": "2020-02-29 00:00:00"
+    },
+    {
+        "input": {
+            "now": "2024-02-29 00:00:00",
+            "expression": " -1 day"
+        },
+        "expected": "2024-02-28 00:00:00"
+    },
+    {
+        "input": {
+            "now": "2024-02-29 00:00:00",
+            "expression": "-1  day"
+        },
+        "expected": "-1  day"
+    },
+    {
+        "input": {
+            "now": "2024-02-29 00:00:00",
+            "expression": "- 1 day"
+        },
+        "expected": "- 1 day"
+    },
+    {
+        "input": {
+            "now": "2024-02-29 00:00:00",
+            "expression": "-1day"
+        },
+        "expected": "-1day"
+    },
+    {
+        "input": {
+            "now": "2024-02-29 00:00:00",
+            "expression": "-1 day ago"
+        },
+        "expected": "-1 day ago"
+    },
+    {
+        "input": {
+            "now": "2024-02-29 00:00:00",
+            "expression": "2024-01-01 00:00:00"
+        },
+        "expected": "2024-01-01 00:00:00"
+    },
+    {
+        "input": {
+            "now": "2024-02-29 00:00:00",
+            "expression": "2024-01-01"
+        },
+        "expected": "2024-01-01"
+    },
+    {
+        "input": {
+            "now": "2024-02-29 00:00:00",
+            "expression": ""
+        },
+        "expected": ""
+    },
+    {
+        "input": {
+            "now": "2024-02-29 00:00:00",
+            "expression": "yesterday"
+        },
+        "expected": "yesterday"
+    },
+    {
+        "input": {
+            "now": "2024-02-29 00:00:00",
+            "expression": "-1 foo"
+        },
+        "expected": "2024-02-29 10:00:00"
+    },
+    {
+        "input": {
+            "now": "2024-02-29 00:00:00",
+            "expression": "+1 monday"
+        },
+        "expected": "2024-03-04 00:00:00"
+    },
+    {
+        "input": {
+            "now": "2024-02-29 00:00:00",
+            "expression": "-1 weekday"
+        },
+        "expected": "2024-02-28 00:00:00"
+    },
+    {
+        "input": {
+            "now": "2024-02-29 00:00:00",
+            "expression": "-1 weekdays"
+        },
+        "expected": "2024-02-28 00:00:00"
+    },
+    {
+        "input": {
+            "now": "2024-02-29 00:00:00",
+            "expression": "-1 msec"
+        },
+        "expected": "2024-02-28 23:59:59"
+    },
+    {
+        "input": {
+            "now": "2023-01-31 23:59:59",
+            "expression": "now"
+        },
+        "expected": "2023-01-31 23:59:59"
+    },
+    {
+        "input": {
+            "now": "2023-01-31 23:59:59",
+            "expression": "NOW"
+        },
+        "expected": "2023-01-31 23:59:59"
+    },
+    {
+        "input": {
+            "now": "2023-01-31 23:59:59",
+            "expression": "nowhere"
+        },
+        "expected": "2023-01-31 23:59:59"
+    },
+    {
+        "input": {
+            "now": "2023-01-31 23:59:59",
+            "expression": "Now()"
+        },
+        "expected": "2023-01-31 23:59:59"
+    },
+    {
+        "input": {
+            "now": "2023-01-31 23:59:59",
+            "expression": "-1 month"
+        },
+        "expected": "2022-12-31 23:59:59"
+    },
+    {
+        "input": {
+            "now": "2023-01-31 23:59:59",
+            "expression": "+1 month"
+        },
+        "expected": "2023-03-03 23:59:59"
+    },
+    {
+        "input": {
+            "now": "2023-01-31 23:59:59",
+            "expression": "1 month"
+        },
+        "expected": "2023-03-03 23:59:59"
+    },
+    {
+        "input": {
+            "now": "2023-01-31 23:59:59",
+            "expression": "-1 months"
+        },
+        "expected": "2022-12-31 23:59:59"
+    },
+    {
+        "input": {
+            "now": "2023-01-31 23:59:59",
+            "expression": "-3 MONTH"
+        },
+        "expected": "2022-10-31 23:59:59"
+    },
+    {
+        "input": {
+            "now": "2023-01-31 23:59:59",
+            "expression": "-13 month"
+        },
+        "expected": "2021-12-31 23:59:59"
+    },
+    {
+        "input": {
+            "now": "2023-01-31 23:59:59",
+            "expression": "+12 months"
+        },
+        "expected": "2024-01-31 23:59:59"
+    },
+    {
+        "input": {
+            "now": "2023-01-31 23:59:59",
+            "expression": "-1 day"
+        },
+        "expected": "2023-01-30 23:59:59"
+    },
+    {
+        "input": {
+            "now": "2023-01-31 23:59:59",
+            "expression": "+1 days"
+        },
+        "expected": "2023-02-01 23:59:59"
+    },
+    {
+        "input": {
+            "now": "2023-01-31 23:59:59",
+            "expression": "-30 day"
+        },
+        "expected": "2023-01-01 23:59:59"
+    },
+    {
+        "input": {
+            "now": "2023-01-31 23:59:59",
+            "expression": "-1 week"
+        },
+        "expected": "2023-01-24 23:59:59"
+    },
+    {
+        "input": {
+            "now": "2023-01-31 23:59:59",
+            "expression": "-2 weeks"
+        },
+        "expected": "2023-01-17 23:59:59"
+    },
+    {
+        "input": {
+            "now": "2023-01-31 23:59:59",
+            "expression": "-1 fortnight"
+        },
+        "expected": "2023-01-17 23:59:59"
+    },
+    {
+        "input": {
+            "now": "2023-01-31 23:59:59",
+            "expression": "-1 hour"
+        },
+        "expected": "2023-01-31 22:59:59"
+    },
+    {
+        "input": {
+            "now": "2023-01-31 23:59:59",
+            "expression": "-24 hours"
+        },
+        "expected": "2023-01-30 23:59:59"
+    },
+    {
+        "input": {
+            "now": "2023-01-31 23:59:59",
+            "expression": "-90 min"
+        },
+        "expected": "2023-01-31 22:29:59"
+    },
+    {
+        "input": {
+            "now": "2023-01-31 23:59:59",
+            "expression": "-5 mins"
+        },
+        "expected": "2023-01-31 23:54:59"
+    },
+    {
+        "input": {
+            "now": "2023-01-31 23:59:59",
+            "expression": "-1 minute"
+        },
+        "expected": "2023-01-31 23:58:59"
+    },
+    {
+        "input": {
+            "now": "2023-01-31 23:59:59",
+            "expression": "-30 minutes"
+        },
+        "expected": "2023-01-31 23:29:59"
+    },
+    {
+        "input": {
+            "now": "2023-01-31 23:59:59",
+            "expression": "-10 sec"
+        },
+        "expected": "2023-01-31 23:59:49"
+    },
+    {
+        "input": {
+            "now": "2023-01-31 23:59:59",
+            "expression": "-10 secs"
+        },
+        "expected": "2023-01-31 23:59:49"
+    },
+    {
+        "input": {
+            "now": "2023-01-31 23:59:59",
+            "expression": "-1 second"
+        },
+        "expected": "2023-01-31 23:59:58"
+    },
+    {
+        "input": {
+            "now": "2023-01-31 23:59:59",
+            "expression": "-45 seconds"
+        },
+        "expected": "2023-01-31 23:59:14"
+    },
+    {
+        "input": {
+            "now": "2023-01-31 23:59:59",
+            "expression": "-1 year"
+        },
+        "expected": "2022-01-31 23:59:59"
+    },
+    {
+        "input": {
+            "now": "2023-01-31 23:59:59",
+            "expression": "+1 years"
+        },
+        "expected": "2024-01-31 23:59:59"
+    },
+    {
+        "input": {
+            "now": "2023-01-31 23:59:59",
+            "expression": "-4 year"
+        },
+        "expected": "2019-01-31 23:59:59"
+    },
+    {
+        "input": {
+            "now": "2023-01-31 23:59:59",
+            "expression": " -1 day"
+        },
+        "expected": "2023-01-30 23:59:59"
+    },
+    {
+        "input": {
+            "now": "2023-01-31 23:59:59",
+            "expression": "-1  day"
+        },
+        "expected": "-1  day"
+    },
+    {
+        "input": {
+            "now": "2023-01-31 23:59:59",
+            "expression": "- 1 day"
+        },
+        "expected": "- 1 day"
+    },
+    {
+        "input": {
+            "now": "2023-01-31 23:59:59",
+            "expression": "-1day"
+        },
+        "expected": "-1day"
+    },
+    {
+        "input": {
+            "now": "2023-01-31 23:59:59",
+            "expression": "-1 day ago"
+        },
+        "expected": "-1 day ago"
+    },
+    {
+        "input": {
+            "now": "2023-01-31 23:59:59",
+            "expression": "2024-01-01 00:00:00"
+        },
+        "expected": "2024-01-01 00:00:00"
+    },
+    {
+        "input": {
+            "now": "2023-01-31 23:59:59",
+            "expression": "2024-01-01"
+        },
+        "expected": "2024-01-01"
+    },
+    {
+        "input": {
+            "now": "2023-01-31 23:59:59",
+            "expression": ""
+        },
+        "expected": ""
+    },
+    {
+        "input": {
+            "now": "2023-01-31 23:59:59",
+            "expression": "yesterday"
+        },
+        "expected": "yesterday"
+    },
+    {
+        "input": {
+            "now": "2023-01-31 23:59:59",
+            "expression": "-1 foo"
+        },
+        "expected": "2023-02-01 09:59:59"
+    },
+    {
+        "input": {
+            "now": "2023-01-31 23:59:59",
+            "expression": "+1 monday"
+        },
+        "expected": "2023-02-06 00:00:00"
+    },
+    {
+        "input": {
+            "now": "2023-01-31 23:59:59",
+            "expression": "-1 weekday"
+        },
+        "expected": "2023-01-30 00:00:00"
+    },
+    {
+        "input": {
+            "now": "2023-01-31 23:59:59",
+            "expression": "-1 weekdays"
+        },
+        "expected": "2023-01-30 00:00:00"
+    },
+    {
+        "input": {
+            "now": "2023-01-31 23:59:59",
+            "expression": "-1 msec"
+        },
+        "expected": "2023-01-31 23:59:58"
+    },
+    {
+        "input": {
+            "now": "2024-12-31 08:00:00",
+            "expression": "now"
+        },
+        "expected": "2024-12-31 08:00:00"
+    },
+    {
+        "input": {
+            "now": "2024-12-31 08:00:00",
+            "expression": "NOW"
+        },
+        "expected": "2024-12-31 08:00:00"
+    },
+    {
+        "input": {
+            "now": "2024-12-31 08:00:00",
+            "expression": "nowhere"
+        },
+        "expected": "2024-12-31 08:00:00"
+    },
+    {
+        "input": {
+            "now": "2024-12-31 08:00:00",
+            "expression": "Now()"
+        },
+        "expected": "2024-12-31 08:00:00"
+    },
+    {
+        "input": {
+            "now": "2024-12-31 08:00:00",
+            "expression": "-1 month"
+        },
+        "expected": "2024-12-01 08:00:00"
+    },
+    {
+        "input": {
+            "now": "2024-12-31 08:00:00",
+            "expression": "+1 month"
+        },
+        "expected": "2025-01-31 08:00:00"
+    },
+    {
+        "input": {
+            "now": "2024-12-31 08:00:00",
+            "expression": "1 month"
+        },
+        "expected": "2025-01-31 08:00:00"
+    },
+    {
+        "input": {
+            "now": "2024-12-31 08:00:00",
+            "expression": "-1 months"
+        },
+        "expected": "2024-12-01 08:00:00"
+    },
+    {
+        "input": {
+            "now": "2024-12-31 08:00:00",
+            "expression": "-3 MONTH"
+        },
+        "expected": "2024-10-01 08:00:00"
+    },
+    {
+        "input": {
+            "now": "2024-12-31 08:00:00",
+            "expression": "-13 month"
+        },
+        "expected": "2023-12-01 08:00:00"
+    },
+    {
+        "input": {
+            "now": "2024-12-31 08:00:00",
+            "expression": "+12 months"
+        },
+        "expected": "2025-12-31 08:00:00"
+    },
+    {
+        "input": {
+            "now": "2024-12-31 08:00:00",
+            "expression": "-1 day"
+        },
+        "expected": "2024-12-30 08:00:00"
+    },
+    {
+        "input": {
+            "now": "2024-12-31 08:00:00",
+            "expression": "+1 days"
+        },
+        "expected": "2025-01-01 08:00:00"
+    },
+    {
+        "input": {
+            "now": "2024-12-31 08:00:00",
+            "expression": "-30 day"
+        },
+        "expected": "2024-12-01 08:00:00"
+    },
+    {
+        "input": {
+            "now": "2024-12-31 08:00:00",
+            "expression": "-1 week"
+        },
+        "expected": "2024-12-24 08:00:00"
+    },
+    {
+        "input": {
+            "now": "2024-12-31 08:00:00",
+            "expression": "-2 weeks"
+        },
+        "expected": "2024-12-17 08:00:00"
+    },
+    {
+        "input": {
+            "now": "2024-12-31 08:00:00",
+            "expression": "-1 fortnight"
+        },
+        "expected": "2024-12-17 08:00:00"
+    },
+    {
+        "input": {
+            "now": "2024-12-31 08:00:00",
+            "expression": "-1 hour"
+        },
+        "expected": "2024-12-31 07:00:00"
+    },
+    {
+        "input": {
+            "now": "2024-12-31 08:00:00",
+            "expression": "-24 hours"
+        },
+        "expected": "2024-12-30 08:00:00"
+    },
+    {
+        "input": {
+            "now": "2024-12-31 08:00:00",
+            "expression": "-90 min"
+        },
+        "expected": "2024-12-31 06:30:00"
+    },
+    {
+        "input": {
+            "now": "2024-12-31 08:00:00",
+            "expression": "-5 mins"
+        },
+        "expected": "2024-12-31 07:55:00"
+    },
+    {
+        "input": {
+            "now": "2024-12-31 08:00:00",
+            "expression": "-1 minute"
+        },
+        "expected": "2024-12-31 07:59:00"
+    },
+    {
+        "input": {
+            "now": "2024-12-31 08:00:00",
+            "expression": "-30 minutes"
+        },
+        "expected": "2024-12-31 07:30:00"
+    },
+    {
+        "input": {
+            "now": "2024-12-31 08:00:00",
+            "expression": "-10 sec"
+        },
+        "expected": "2024-12-31 07:59:50"
+    },
+    {
+        "input": {
+            "now": "2024-12-31 08:00:00",
+            "expression": "-10 secs"
+        },
+        "expected": "2024-12-31 07:59:50"
+    },
+    {
+        "input": {
+            "now": "2024-12-31 08:00:00",
+            "expression": "-1 second"
+        },
+        "expected": "2024-12-31 07:59:59"
+    },
+    {
+        "input": {
+            "now": "2024-12-31 08:00:00",
+            "expression": "-45 seconds"
+        },
+        "expected": "2024-12-31 07:59:15"
+    },
+    {
+        "input": {
+            "now": "2024-12-31 08:00:00",
+            "expression": "-1 year"
+        },
+        "expected": "2023-12-31 08:00:00"
+    },
+    {
+        "input": {
+            "now": "2024-12-31 08:00:00",
+            "expression": "+1 years"
+        },
+        "expected": "2025-12-31 08:00:00"
+    },
+    {
+        "input": {
+            "now": "2024-12-31 08:00:00",
+            "expression": "-4 year"
+        },
+        "expected": "2020-12-31 08:00:00"
+    },
+    {
+        "input": {
+            "now": "2024-12-31 08:00:00",
+            "expression": " -1 day"
+        },
+        "expected": "2024-12-30 08:00:00"
+    },
+    {
+        "input": {
+            "now": "2024-12-31 08:00:00",
+            "expression": "-1  day"
+        },
+        "expected": "-1  day"
+    },
+    {
+        "input": {
+            "now": "2024-12-31 08:00:00",
+            "expression": "- 1 day"
+        },
+        "expected": "- 1 day"
+    },
+    {
+        "input": {
+            "now": "2024-12-31 08:00:00",
+            "expression": "-1day"
+        },
+        "expected": "-1day"
+    },
+    {
+        "input": {
+            "now": "2024-12-31 08:00:00",
+            "expression": "-1 day ago"
+        },
+        "expected": "-1 day ago"
+    },
+    {
+        "input": {
+            "now": "2024-12-31 08:00:00",
+            "expression": "2024-01-01 00:00:00"
+        },
+        "expected": "2024-01-01 00:00:00"
+    },
+    {
+        "input": {
+            "now": "2024-12-31 08:00:00",
+            "expression": "2024-01-01"
+        },
+        "expected": "2024-01-01"
+    },
+    {
+        "input": {
+            "now": "2024-12-31 08:00:00",
+            "expression": ""
+        },
+        "expected": ""
+    },
+    {
+        "input": {
+            "now": "2024-12-31 08:00:00",
+            "expression": "yesterday"
+        },
+        "expected": "yesterday"
+    },
+    {
+        "input": {
+            "now": "2024-12-31 08:00:00",
+            "expression": "-1 foo"
+        },
+        "expected": "2024-12-31 18:00:00"
+    },
+    {
+        "input": {
+            "now": "2024-12-31 08:00:00",
+            "expression": "+1 monday"
+        },
+        "expected": "2025-01-06 00:00:00"
+    },
+    {
+        "input": {
+            "now": "2024-12-31 08:00:00",
+            "expression": "-1 weekday"
+        },
+        "expected": "2024-12-30 00:00:00"
+    },
+    {
+        "input": {
+            "now": "2024-12-31 08:00:00",
+            "expression": "-1 weekdays"
+        },
+        "expected": "2024-12-30 00:00:00"
+    },
+    {
+        "input": {
+            "now": "2024-12-31 08:00:00",
+            "expression": "-1 msec"
+        },
+        "expected": "2024-12-31 07:59:59"
+    }
+]

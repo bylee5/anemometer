@@ -1,0 +1,106 @@
+[
+    {
+        "input": "0",
+        "expected": "0"
+    },
+    {
+        "input": "1",
+        "expected": "1"
+    },
+    {
+        "input": "9",
+        "expected": "9"
+    },
+    {
+        "input": "10",
+        "expected": "A"
+    },
+    {
+        "input": "15",
+        "expected": "F"
+    },
+    {
+        "input": "16",
+        "expected": "10"
+    },
+    {
+        "input": "17",
+        "expected": "11"
+    },
+    {
+        "input": "31",
+        "expected": "1F"
+    },
+    {
+        "input": "32",
+        "expected": "20"
+    },
+    {
+        "input": "100",
+        "expected": "64"
+    },
+    {
+        "input": "240",
+        "expected": "F0"
+    },
+    {
+        "input": "241",
+        "expected": "F1"
+    },
+    {
+        "input": "255",
+        "expected": "FF"
+    },
+    {
+        "input": "256",
+        "expected": "100"
+    },
+    {
+        "input": "4095",
+        "expected": "FFF"
+    },
+    {
+        "input": "4096",
+        "expected": "1000"
+    },
+    {
+        "input": "65535",
+        "expected": "FFFF"
+    },
+    {
+        "input": "65536",
+        "expected": "10000"
+    },
+    {
+        "input": "123456789",
+        "expected": "75BCD15"
+    },
+    {
+        "input": "4294967295",
+        "expected": "FFFFFFFF"
+    },
+    {
+        "input": "4294967296",
+        "expected": "100000000"
+    },
+    {
+        "input": "9223372036854775807",
+        "expected": "7FFFFFFFFFFFFFFF"
+    },
+    {
+        "input": "9223372036854775808",
+        "expected": "8000000000000000"
+    },
+    {
+        "input": "18446744073709551615",
+        "expected": "FFFFFFFFFFFFFFFF"
+    },
+    {
+        "input": "13704592416224898532",
+        "expected": "BE307E314898EDE4"
+    },
+    {
+        "input": "00042",
+        "expected": "2A"
+    }
+]

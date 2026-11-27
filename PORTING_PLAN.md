@@ -99,7 +99,7 @@ conf/config.inc.php ──► Helpers.dec2hex (콜백 안에서) ┘
 | `json_encode` | `report_json*.php` | 표준 `json` | 원본은 `Content-Type: text/html`로 응답한다. 프런트 JS가 문제없는지 확인 후 `application/json`으로 바꾼다 |
 | `preg_match` / `preg_replace` / `preg_split` | Rewrite, Parser, Report | 표준 `re` (`re.ASCII`) | |
 | `proc_open` (pt-visual-explain, pt-query-advisor) | Model | 표준 `subprocess.run(input=..., cwd=..., timeout=...)` | 원본엔 타임아웃이 없다. 추가 권장 |
-| `strtotime("-1 month")`, `date("Y-m-d H:i:s")` | `MySQLTableReport::reldate` | 표준 `datetime` + **python-dateutil** (`relativedelta`) | 입력 형식이 `^\s*([+-])?(\d+)\s(\w+)$` 하나로 제한되어 있어 작은 파서로 충분하다. 단위 이름(`month`, `days` 등) 목록을 테스트로 고정 |
+| `strtotime("-1 month")`, `date("Y-m-d H:i:s")` | `MySQLTableReport::reldate` | 표준 `datetime` (`anemometer.util.timeutil`) | 입력 형식이 `^\s*([+-])?(\d+)\s(\w+)$` 하나로 제한되어 있어 작은 파서로 충분하다. `relativedelta`는 월말 처리 규칙이 PHP와 달라(3/31 − 1개월: PHP 3/2, relativedelta 2/29) 쓰지 않는다. 요일 이름 등 비정형 표현은 해석하지 않고 그대로 둔다 |
 | `strptime` / `mktime` (서버 로컬 시간) | `report_json2.php` | `datetime.strptime` + `.timestamp()` | 로컬 시간대 기준이어야 그래프가 원본과 같다 |
 | `exec('date +%Z')`, `timezone_offset_get` | 컨트롤러 생성자 | 표준 `zoneinfo` + **tzlocal** | 셸 호출 제거. 시간대는 설정 값으로 받는 것을 권장 |
 | `date('N', strtotime($x))` (주말 판정) | 설정 콜백 | `datetime.isoweekday()` | |
@@ -113,7 +113,7 @@ conf/config.inc.php ──► Helpers.dec2hex (콜백 안에서) ┘
 | Apache + mod_php | 배포 | **gunicorn** (Linux) / **waitress** (Windows) | 정적 파일은 웹서버 또는 Flask `static` |
 | — | 테스트 DB | **testcontainers** (MySQL) 또는 docker-compose | 통합 테스트용 (선택) |
 
-최종 런타임 의존: `flask`, `pymysql`, `python-dateutil`, `tzlocal`, `wcwidth`, (운영) `gunicorn` 또는 `waitress`.
+최종 런타임 의존: `flask`, `pymysql`, (운영) `gunicorn` 또는 `waitress`. (`tzlocal`은 10단계에서 필요 여부 판단. 5절 결정 1에 따라 표 출력은 원본처럼 바이트 길이 기준으로 맞추므로 `wcwidth`는 쓰지 않는다.)
 개발 의존: `pytest`, (선택) `testcontainers`.
 
 ---
