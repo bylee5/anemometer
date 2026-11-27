@@ -1,143 +1,116 @@
-[![Project Status](http://opensource.box.com/badges/maintenance.svg)](http://opensource.box.com/badges)
+Anemometer
+==========
 
-Box Anemometer
---------------
+A web UI for MySQL slow query logs: it shows the query digests that
+[pt-query-digest](https://docs.percona.com/percona-toolkit/pt-query-digest.html)
+stores in MySQL, as searchable tables and graphs, and lets you review queries.
 
-This is the Box Anemometer, the MySQL Slow Query Monitor.  This tool is used to analyze slow query logs collected from MySQL instances to identify problematic queries.
+This is a Python port of [Box Anemometer](https://github.com/box/Anemometer)
+(PHP). How it was ported and verified is described in
+[PORTING_RESULT.md](PORTING_RESULT.md).
 
-### Documentation ###
+## How it fits together
 
-1.	[What is Anemometer?](https://github.com/box/Anemometer/wiki)
-2.	[Extra Features](https://github.com/box/Anemometer/wiki/Extra-Features)
-3.	[Using PERFORMANCE_SCHEMA](https://github.com/box/Anemometer/wiki/Using-PERFORMANCE_SCHEMA-in-MySQL-5.6)
-4.	[Collection Script](https://github.com/box/Anemometer/wiki/Anemometer-Collection-Script)
-5.	[Development with Vagrant](https://github.com/box/Anemometer/wiki/Development-with-Vagrant)
-6.	Installation: See Quickstart below
+```
+slow query log --(pt-query-digest)--> MySQL "slow_query_log" DB --> Anemometer
+```
 
-### Quickstart ###
+Anemometer only reads (and annotates) the digests; collecting them is done by
+`pt-query-digest`, for example from cron.
 
-If you're just completely itching to start using this tool, here's what you need:
+## Setup
 
-1.	a MySQL database to store query analysis data in.
-2.	[pt-query-digest](http://www.percona.com/doc/percona-toolkit/pt-query-digest.html).
-	*	You may as well just get the whole [Percona Toolkit](http://www.percona.com/doc/percona-toolkit) while you're at it :)
-3.	a slow query log from a MySQL server (see [The Slow Query Log](http://dev.mysql.com/doc/refman/5.5/en/slow-query-log.html) for info on getting one)
-4.	a webserver with PHP
+### 1. Storage database
 
+```sh
+mysql -h db.example.com < install.sql
+mysql -h db.example.com -e "CREATE USER 'anemometer'@'%' IDENTIFIED BY '...';
+  GRANT ALL ON slow_query_log.* TO 'anemometer'@'%';"
+```
 
-#### Setup DB ####
+Checksums are stored as `CHAR(32)` (Percona Toolkit 3.x). For MySQL 5.6
+`performance_schema` sources see `mysql56-install.sql`.
 
-First up, grab the anemometer code from github. Navigate to the document root of your web server and snag a copy of the Box Anemometer code.
+### 2. Collect slow query digests
 
-    $ git clone git://github.com/box/Anemometer.git anemometer 
-Or, if you have 9418 port closed:
+```sh
+pt-query-digest --user=anemometer --password=... \
+  --review  h=db.example.com,D=slow_query_log,t=global_query_review \
+  --history h=db.example.com,D=slow_query_log,t=global_query_review_history \
+  --no-report --limit=0% \
+  --filter=" \$event->{Bytes} = length(\$event->{arg}) and \$event->{hostname}=\"$HOSTNAME\"" \
+  /var/lib/mysql/db.example.com-slow.log
+```
 
-    $ git clone https://github.com/box/Anemometer.git anemometer 
+`scripts/anemometer_collect.sh` wraps this for cron: it turns the slow log on
+for an interval, digests it and turns it off again (see the script's header).
 
+### 3. Run the web application
 
-Then change your current working directory to the Anemometer directory:
+```sh
+python -m venv .venv
+.venv/bin/pip install -e .                 # Windows: .venv\Scripts\pip
+cp conf/config.sample.py conf/config.py    # then edit it
+export ANEMOMETER_SECRET_KEY=...           # signs the session cookie
+.venv/bin/flask --app "anemometer.web:create_app()" run
+```
 
-    $ cd anemometer
-    
-Next, you should connect to the MySQL database you're looking to store the analysis data in and issue the following command:
+In production use a WSGI server, e.g. `gunicorn "anemometer.web:create_app()"`
+(Linux) or `waitress-serve --call anemometer.web:create_app` (Windows).
 
-    $ mysql -h db.example.com < install.sql
-    $ mysql -h db.example.com -e "grant ALL ON slow_query_log.* to 'anemometer'@'%' IDENTIFIED BY 'superSecurePass';"
+Settings (environment variables):
 
-#### Put some data in the DB ####
+| Variable | Meaning |
+|---|---|
+| `ANEMOMETER_CONFIG` | configuration file (default `conf/config.py`) |
+| `ANEMOMETER_SECRET_KEY` | session signing key |
+| `ANEMOMETER_TIMEZONE` | time zone for graphs (default: server local time) |
+| `ANEMOMETER_STATIC_DIR` | directory with `js/`, `css/`, `img/` (default: this repository) |
 
-Next, grab that slow query log file you have (mine's called "slow.log"!), and run pt-query-digest on it:
-**NOTE:** I'm using a BASH 3.0 shell here on my MySQL database server! This is so the "$HOSTNAME" variable properly replaces with "db.example.com")
+URLs look like `/index.php?action=report&datasource=...`, the same as the PHP
+version, so existing bookmarks keep working.
 
+## Development
 
-For pt-query-digest version < 2.2
+```sh
+.venv/bin/pip install -e ".[dev]"
+.venv/bin/pytest                           # MySQL tests are skipped
+tools/test_mysql.sh start                  # throwaway MySQL 5.7 in Docker
+export ANEMOMETER_TEST_MYSQL=root:test@127.0.0.1:33306
+.venv/bin/pytest                           # everything
+tools/test_mysql.sh stop                   # removes the container and its data
+```
 
-    $ pt-query-digest --user=anemometer --password=superSecurePass \
-                      --review h=db.example.com,D=slow_query_log,t=global_query_review \
-                      --review-history h=db.example.com,D=slow_query_log,t=global_query_review_history \
-                      --no-report --limit=0% \ 
-                      --filter=" \$event->{Bytes} = length(\$event->{arg}) and \$event->{hostname}=\"$HOSTNAME\"" \ 
-                      /var/lib/mysql/db.example.com-slow.log
-    
+`tools/load_demo_data.py` fills the test server with a week of made-up digests
+for trying the UI (point `conf/config.py` at port 33306).
 
-For pt-query-digest version >= 2.2
+Many tests compare against output recorded from the original PHP code
+(`tests/golden/*.json`), including whole pages of the PHP application
+(`tests/test_e2e.py`).
 
-    $ pt-query-digest --user=anemometer --password=superSecurePass \
-                      --review h=db.example.com,D=slow_query_log,t=global_query_review \
-                      --history h=db.example.com,D=slow_query_log,t=global_query_review_history \
-                      --no-report --limit=0% \ 
-                      --filter=" \$event->{Bytes} = length(\$event->{arg}) and \$event->{hostname}=\"$HOSTNAME\"" \ 
-                      /var/lib/mysql/db.example.com-slow.log
+### Layout
 
+| Path | Contents |
+|---|---|
+| `anemometer/web.py` | Flask app, routing (`?action=`) |
+| `anemometer/controller.py` | the actions: report, graph search, query details, review |
+| `anemometer/report.py` | builds the aggregate SQL from search form values |
+| `anemometer/model.py` | datasource settings, review table access, plugins |
+| `anemometer/explain.py` | EXPLAIN / SHOW CREATE TABLE on the query's own server |
+| `anemometer/views.py`, `anemometer/templates/` | page rendering |
+| `anemometer/config.py`, `conf/config.sample.py` | configuration |
+| `anemometer/db.py`, `anemometer/request_vars.py`, `anemometer/sql/`, `anemometer/util/` | helpers |
+| `js/`, `css/`, `img/` | front-end assets (unchanged from the PHP version) |
 
-    Pipeline process 11 (aggregate fingerprint) caused an error: Argument "57A" isn't numeric in numeric gt (>) at (eval 40) line 6, <> line 27.
-    Pipeline process 11 (aggregate fingerprint) caused an error: Argument "57B" isn't numeric in numeric gt (>) at (eval 40) line 6, <> line 28.
-    Pipeline process 11 (aggregate fingerprint) caused an error: Argument "57C" isn't numeric in numeric gt (>) at (eval 40) line 6, <> line 29.
+## Known issues
 
-You may see an error like above, that's okay!
-TODO: explain what the options above are doing.
+Inherited from the PHP version and kept on purpose during the port:
 
+- Templates print values without HTML escaping (XSS).
+- Search form values are interpolated into SQL; the `where`, `group`, `order`,
+  `having` and `limit` fields are raw SQL by design. Use a read-only database
+  account where possible.
 
-#### View the data! ####
+## License
 
-Now, navigate to the document root of your web server and copy the sample config so you can edit it:
-
-    $ cd anemometer/conf
-    $ cp sample.config.inc.php config.inc.php 
-
-
-The sample config explains every setting you may want to change in it.  At the very least, make sure you set the Datasource to the MySQL database you're storing the analyzed digest information in:
-
-    $conf['datasources']['localhost'] = array(
-    	'host'	=> 'db.example.com',
-    	'port'	=> 3306,
-    	'db'	=> 'slow_query_log',
-    	'user'	=> 'anemometer',
-    	'password' => 'superSecurePass',
-    	'tables' => array(
-    		'global_query_review' => 'fact',
-    		'global_query_review_history' => 'dimension'
-    	)
-    );
-
-In addition, the "explain" plugin is enabled by default in the current release and you'll need to setup the username and password it uses to an account that has privileges to explain queries on a given schema on a host.  For example, if you're digesting slow logs that primarily contain queries from the "world" database on db.example.com, you'll need to ensure that the user account you put into the following section of the config has the necessary privileges on the "world" database on db.example.com.  To do this, scroll down in the sample config to the section containing the plugins configuration and change the 'user' and 'password' parameters to an appropriate account:
-
-    $conf['plugins'] = array(
-            ...
-        'explain'       =>      function ($sample) {
-            $conn['user'] = 'anemometer';
-            $conn['password'] = 'superSecurePass';
-            
-            return $conn;
-        },
-    );
-
-
-
-Now you should be able to navigate to your webserver in a browser and see Box Anemometer in action!
-
-
-### Phpdocs ###
-
-Phpdocs for this tool can be found in the "docs" sub-directory of the project.
-
-### Dependencies ###
-
-This application requires an Apache webserver with PHP 5.3+ and a MySQL database that contains the data aggregated from MySQL slow query logs.
-
-
-## Copyright and License
-
-Copyright 2014 Box, Inc. All rights reserved.
-
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-   http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
+Apache 2.0, see [LICENSE](LICENSE).

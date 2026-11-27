@@ -1,0 +1,38 @@
+[build-system]
+requires = ["setuptools>=77"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "anemometer"
+version = "0.1.0"
+description = "MySQL slow query log monitor (Python port of Box Anemometer)"
+license = "Apache-2.0"
+requires-python = ">=3.9"
+dependencies = [
+    "flask>=2.2",
+    "pymysql>=1.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7",
+    "ruff>=0.4",
+    "tzdata",  # zoneinfo data on Windows (tests use Asia/Seoul)
+]
+
+[tool.setuptools.packages.find]
+include = ["anemometer*"]
+
+[tool.setuptools.package-data]
+anemometer = ["templates/*.html"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]
+
+[tool.ruff]
+target-version = "py39"
+line-length = 100
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "UP", "B"]

@@ -120,7 +120,7 @@ conf/config.inc.php ──► Helpers.dec2hex (콜백 안에서) ┘
 
 ## 3. 목표 패키지 구조
 
-Python 코드는 전부 저장소의 `rewrite/` 폴더 아래에 둔다. 아래 경로는 `rewrite/` 기준이다.
+Python 코드는 전부 저장소의 `rewrite/` 폴더 아래에 둔다. 아래 경로는 `rewrite/` 기준이다. (이식 완료 후 루트로 옮겼다 — 6절 참고)
 
 ```
 pyproject.toml
@@ -266,8 +266,6 @@ URL 구조(`index.php?action=report&datasource=...&table_fields[]=...`)는 **그
 
 ## 6. 진행 상황 (2026-11-27)
 
-단계 0~10 완료. 코드는 `rewrite/`에 있고, 실행·테스트 방법과 PHP 버전과의 차이는 [rewrite/README.md](rewrite/README.md)에 정리했다.
+단계 0~10 완료. 이식이 끝난 뒤 저장소를 정리했다: PHP 원본·`docs/`·`vagrant/`·`.tar`와 기준 데이터 생성 도구를 지우고, `rewrite/`에 있던 Python 프로젝트를 저장소 루트로 옮겼다. 이 문서의 `rewrite/` 경로는 이제 루트 기준으로 읽으면 된다.
 
-- 검증: PHP 원본을 Docker에서 실행해 기록한 기준 데이터와 비교한다. 모듈 단위 비교에 더해, 원본 `index.php` 전체와 Python 앱에 같은 요청 18건을 보내 응답을 비교한다(`tests/test_e2e.py`, 공백과 현재 시각 타임스탬프만 정규화).
-- 남은 일: 단계 11(병행 운영·전환). 운영 설정(`conf/config.inc.php`)을 `rewrite/conf/config.py`로 옮기고, 비밀번호는 환경 변수로 분리해야 한다.
-- 이식하면서 고치지 않은 문제(결정 1): HTML 이스케이프 없음, 검색 값의 SQL 직접 삽입.
+결과, 검증 방법, PHP 버전과 다른 점, 남은 일(단계 11 포함)은 [PORTING_RESULT.md](PORTING_RESULT.md)에 정리했다.
