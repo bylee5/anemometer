@@ -1,0 +1,178 @@
+[
+    {
+        "input": "SELECT * FROM t",
+        "expected": [
+            "t"
+        ]
+    },
+    {
+        "input": "select * from t1 join t2 using (id)",
+        "expected": [
+            "t1",
+            "t2"
+        ]
+    },
+    {
+        "input": "SELECT a FROM db.t1 AS x JOIN `db`.`t2` y ON x.id = y.id LEFT JOIN t3 ON 1",
+        "expected": [
+            "db.t1",
+            "db.t2",
+            "t3"
+        ]
+    },
+    {
+        "input": "SELECT * FROM t1, t2, t3 WHERE t1.a = t2.a",
+        "expected": [
+            "t1",
+            "t2",
+            "t3"
+        ]
+    },
+    {
+        "input": "SELECT * FROM t1 ,t2 WHERE 1",
+        "expected": [
+            "t1"
+        ]
+    },
+    {
+        "input": "SELECT * FROM t1,t2,t3",
+        "expected": [
+            "t1t2t3"
+        ]
+    },
+    {
+        "input": "SELECT * FROM t1, t2 , t3",
+        "expected": [
+            "t1",
+            "t2"
+        ]
+    },
+    {
+        "input": "SELECT *\n  FROM\tt1\n\n  JOIN   t2 ON 1",
+        "expected": [
+            "t1",
+            "t2"
+        ]
+    },
+    {
+        "input": "UPDATE t SET a = 1 WHERE b = 2",
+        "expected": [
+            "t"
+        ]
+    },
+    {
+        "input": "INSERT INTO t (a) VALUES (1)",
+        "expected": [
+            "t"
+        ]
+    },
+    {
+        "input": "INSERT INTO t SELECT * FROM s",
+        "expected": [
+            "t",
+            "s"
+        ]
+    },
+    {
+        "input": "DELETE FROM t WHERE 1",
+        "expected": [
+            "t"
+        ]
+    },
+    {
+        "input": "SELECT * FROM t WHERE x IN (SELECT y FROM u)",
+        "expected": [
+            "t",
+            "u)"
+        ]
+    },
+    {
+        "input": "SELECT * FROM (SELECT 1) AS d",
+        "expected": [
+            "(SELECT"
+        ]
+    },
+    {
+        "input": "SELECT 'from x' FROM t",
+        "expected": [
+            "t"
+        ]
+    },
+    {
+        "input": "SELECT * FROM `my table`",
+        "expected": [
+            "my"
+        ]
+    },
+    {
+        "input": "SELECT * FROM t1 JOIN t1 ON 1",
+        "expected": [
+            "t1"
+        ]
+    },
+    {
+        "input": "SELECT * FROM 한글테이블",
+        "expected": []
+    },
+    {
+        "input": "SELECT * FROM 123",
+        "expected": [
+            "123"
+        ]
+    },
+    {
+        "input": " SELECT * FROM leading_space",
+        "expected": [
+            "leading_space"
+        ]
+    },
+    {
+        "input": "SELECT * FROM trailing,",
+        "expected": [
+            "trailing"
+        ]
+    },
+    {
+        "input": "SELECT * FROM a, b,",
+        "expected": [
+            "a",
+            "b"
+        ]
+    },
+    {
+        "input": "SELECT * FROM",
+        "expected": []
+    },
+    {
+        "input": "SELECT 1",
+        "expected": []
+    },
+    {
+        "input": "",
+        "expected": []
+    },
+    {
+        "input": "FROM",
+        "expected": []
+    },
+    {
+        "input": "SELECT * FROM t1 STRAIGHT_JOIN t2",
+        "expected": [
+            "t1"
+        ]
+    },
+    {
+        "input": "SELECT * FROM t INTO OUTFILE \"/tmp/x\"",
+        "expected": [
+            "t",
+            "OUTFILE"
+        ]
+    },
+    {
+        "input": "SELECT * FROM `db`.`t`, `db`.`u`",
+        "expected": [
+            "db.t",
+            "db.u"
+        ]
+    }
+]
