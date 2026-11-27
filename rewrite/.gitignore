@@ -6,3 +6,6 @@ __pycache__/
 .ruff_cache/
 build/
 dist/
+
+# Site configuration (may contain credentials); copy conf/config.sample.py
+conf/config.py

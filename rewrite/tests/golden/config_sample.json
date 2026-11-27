@@ -1,0 +1,443 @@
+[
+    {
+        "input": "conf",
+        "expected": {
+            "datasources": {
+                "localhost": {
+                    "host": "localhost",
+                    "port": 3306,
+                    "db": "slow_query_log",
+                    "user": "root",
+                    "password": "",
+                    "tables": {
+                        "global_query_review": "fact",
+                        "global_query_review_history": "dimension"
+                    },
+                    "source_type": "slow_query_log"
+                }
+            },
+            "default_report_action": "report",
+            "reviewers": [
+                "dba1",
+                "dba2"
+            ],
+            "review_types": [
+                "good",
+                "bad",
+                "ticket-created",
+                "needs-fix",
+                "fixed",
+                "needs-analysis",
+                "review-again"
+            ],
+            "history_defaults": {
+                "output": "table",
+                "fact-group": "date",
+                "fact-order": "date DESC",
+                "fact-limit": "90",
+                "dimension-ts_min_start": "-90 day",
+                "dimension-ts_min_end": "+0 day",
+                "table_fields": [
+                    "date",
+                    "index_ratio",
+                    "query_time_avg",
+                    "rows_sent_avg",
+                    "ts_cnt",
+                    "Query_time_sum",
+                    "Lock_time_sum",
+                    "Rows_sent_sum",
+                    "Rows_examined_sum",
+                    "Tmp_table_sum",
+                    "Filesort_sum",
+                    "Full_scan_sum"
+                ],
+                "performance_schema": {
+                    "fact-order": "SUM_TIMER_WAIT DESC",
+                    "fact-limit": "20",
+                    "fact-group": "DIGEST",
+                    "table_fields": [
+                        "DIGEST",
+                        "index_ratio",
+                        "COUNT_STAR",
+                        "SUM_LOCK_TIME",
+                        "SUM_ROWS_AFFECTED",
+                        "SUM_ROWS_SENT",
+                        "SUM_ROWS_EXAMINED",
+                        "SUM_CREATED_TMP_TABLES",
+                        "SUM_SORT_SCAN",
+                        "SUM_NO_INDEX_USED"
+                    ]
+                },
+                "performance_schema_history": {
+                    "output": "table",
+                    "fact-group": "date",
+                    "fact-order": "date DESC",
+                    "fact-limit": "90",
+                    "dimension-FIRST_SEEN_start": "-90 day",
+                    "dimension-FIRST_SEEN_end": "+0 day",
+                    "table_fields": [
+                        "date",
+                        "snippet",
+                        "index_ratio",
+                        "COUNT_STAR",
+                        "SUM_LOCK_TIME",
+                        "SUM_ROWS_AFFECTED",
+                        "SUM_ROWS_SENT",
+                        "SUM_ROWS_EXAMINED",
+                        "SUM_CREATED_TMP_TABLES",
+                        "SUM_SORT_SCAN",
+                        "SUM_NO_INDEX_USED"
+                    ]
+                }
+            },
+            "report_defaults": {
+                "fact-group": "checksum",
+                "fact-order": "Query_time_sum DESC",
+                "fact-limit": "20",
+                "dimension-ts_min_start": "-1 day",
+                "dimension-ts_min_end": "+0 day",
+                "table_fields": [
+                    "checksum",
+                    "snippet",
+                    "index_ratio",
+                    "query_time_avg",
+                    "rows_sent_avg",
+                    "ts_cnt",
+                    "Query_time_sum",
+                    "Lock_time_sum",
+                    "Rows_sent_sum",
+                    "Rows_examined_sum",
+                    "Tmp_table_sum",
+                    "Filesort_sum",
+                    "Full_scan_sum"
+                ],
+                "dimension-pivot-hostname_max": null,
+                "performance_schema": {
+                    "fact-order": "SUM_TIMER_WAIT DESC",
+                    "fact-limit": "20",
+                    "fact-group": "DIGEST",
+                    "table_fields": [
+                        "DIGEST",
+                        "snippet",
+                        "index_ratio",
+                        "COUNT_STAR",
+                        "SUM_TIMER_WAIT",
+                        "SUM_LOCK_TIME",
+                        "SUM_ROWS_AFFECTED",
+                        "SUM_ROWS_SENT",
+                        "SUM_ROWS_EXAMINED",
+                        "SUM_CREATED_TMP_TABLES",
+                        "SUM_SORT_SCAN",
+                        "SUM_NO_INDEX_USED"
+                    ]
+                },
+                "performance_schema_history": {
+                    "fact-group": "DIGEST",
+                    "fact-order": "SUM_TIMER_WAIT DESC",
+                    "fact-limit": "20",
+                    "dimension-FIRST_SEEN_start": "-1 day",
+                    "dimension-FIRST_SEEN_end": "+0 day",
+                    "table_fields": [
+                        "DIGEST",
+                        "snippet",
+                        "index_ratio",
+                        "COUNT_STAR",
+                        "SUM_LOCK_TIME",
+                        "SUM_ROWS_AFFECTED",
+                        "SUM_ROWS_SENT",
+                        "SUM_ROWS_EXAMINED",
+                        "SUM_CREATED_TMP_TABLES",
+                        "SUM_SORT_SCAN",
+                        "SUM_NO_INDEX_USED"
+                    ]
+                }
+            },
+            "graph_defaults": {
+                "fact-group": "minute_ts",
+                "fact-order": "minute_ts",
+                "fact-limit": "",
+                "dimension-ts_min_start": "-7 day",
+                "dimension-ts_min_end": "+0 day",
+                "table_fields": [
+                    "minute_ts"
+                ],
+                "plot_field": "Query_time_sum",
+                "performance_schema_history": {
+                    "fact-group": "minute_ts",
+                    "fact-order": "minute_ts",
+                    "fact-limit": "",
+                    "dimension-FIRST_SEEN_start": "-7 day",
+                    "dimension-FIRST_SEEN_end": "+0 day",
+                    "table_fields": [
+                        "minute_ts"
+                    ],
+                    "plot_field": "SUM_TIMER_WAIT",
+                    "dimension-pivot-hostname_max": null
+                }
+            },
+            "plugins": {
+                "visual_explain": "/usr/bin/pt-visual-explain",
+                "show_create": true,
+                "show_status": true,
+                "explain": "<callable>"
+            },
+            "reports": {
+                "slow_query_log": {
+                    "join": {
+                        "dimension": "USING (`checksum`)"
+                    },
+                    "fields": {
+                        "fact": {
+                            "group": "group",
+                            "order": "order",
+                            "having": "having",
+                            "limit": "limit",
+                            "first_seen": "clear|reldate|ge|where",
+                            "where": "raw_where",
+                            "sample": "clear|like|where",
+                            "checksum": "clear|where",
+                            "reviewed_status": "clear|where"
+                        },
+                        "dimension": {
+                            "extra_fields": "where",
+                            "hostname_max": "clear|where",
+                            "ts_min": "date_range|reldate|clear|where",
+                            "pivot-hostname_max": "clear|pivot|select",
+                            "pivot-checksum": "clear|pivot|select"
+                        }
+                    },
+                    "custom_fields": {
+                        "checksum": "checksum",
+                        "date": "DATE(ts_min)",
+                        "hour": "substring(ts_min,1,13)",
+                        "hour_ts": "round(unix_timestamp(substring(ts_min,1,13)))",
+                        "minute_ts": "round(unix_timestamp(substring(ts_min,1,16)))",
+                        "minute": "substring(ts_min,1,16)",
+                        "snippet": "LEFT(dimension.sample,20)",
+                        "index_ratio": "ROUND(SUM(Rows_examined_sum)/SUM(rows_sent_sum),2)",
+                        "query_time_avg": "SUM(Query_time_sum) / SUM(ts_cnt)",
+                        "rows_sent_avg": "ROUND(SUM(Rows_sent_sum)/SUM(ts_cnt),0)"
+                    },
+                    "callbacks": {
+                        "table": {
+                            "date": "<callable>",
+                            "checksum": "<callable>"
+                        }
+                    }
+                },
+                "performance_schema": {
+                    "fields": {
+                        "fact": {
+                            "order": "order",
+                            "having": "having",
+                            "limit": "limit",
+                            "first_seen": "date_range|reldate|clear|where",
+                            "where": "raw_where",
+                            "DIGEST": "clear|where",
+                            "DIGEST_TEXT": "clear|like|where",
+                            "group": "group"
+                        }
+                    },
+                    "custom_fields": {
+                        "snippet": "LEFT(fact.DIGEST_TEXT,20)",
+                        "index_ratio": "ROUND(SUM_ROWS_EXAMINED/SUM_ROWS_SENT,2)",
+                        "rows_sent_avg": "ROUND(SUM_ROWS_SENT/COUNT_STAR,0)"
+                    },
+                    "special_field_names": {
+                        "time": "FIRST_SEEN",
+                        "checksum": "DIGEST",
+                        "sample": "DIGEST_TEXT",
+                        "fingerprint": "DIGEST_TEXT"
+                    }
+                },
+                "performance_schema_history": {
+                    "join": {
+                        "dimension": "USING (`DIGEST`)"
+                    },
+                    "fields": {
+                        "fact": {
+                            "group": "group",
+                            "order": "order",
+                            "having": "having",
+                            "limit": "limit",
+                            "first_seen": "clear|reldate|ge|where",
+                            "where": "raw_where",
+                            "DIGEST_TEXT": "clear|like|where",
+                            "DIGEST": "clear|where",
+                            "reviewed_status": "clear|where"
+                        },
+                        "dimension": {
+                            "extra_fields": "where",
+                            "hostname": "clear|where",
+                            "FIRST_SEEN": "date_range|reldate|clear|where",
+                            "pivot-hostname": "clear|pivot|select"
+                        }
+                    },
+                    "custom_fields": {
+                        "date": "DATE(fact.FIRST_SEEN)",
+                        "snippet": "LEFT(fact.DIGEST_TEXT,20)",
+                        "index_ratio": "ROUND(SUM_ROWS_EXAMINED/SUM_ROWS_SENT,2)",
+                        "rows_sent_avg": "ROUND(SUM_ROWS_SENT/COUNT_STAR,0)",
+                        "hour": "substring(dimension.FIRST_SEEN,1,13)",
+                        "hour_ts": "round(unix_timestamp(substring(dimension.FIRST_SEEN,1,13)))",
+                        "minute_ts": "round(unix_timestamp(substring(dimension.FIRST_SEEN,1,16)))",
+                        "minute": "substring(dimension.FIRST_SEEN,1,16)"
+                    },
+                    "special_field_names": {
+                        "time": "FIRST_SEEN",
+                        "checksum": "DIGEST",
+                        "hostname": "hostname",
+                        "sample": "DIGEST_TEXT"
+                    }
+                }
+            }
+        }
+    },
+    {
+        "input": {
+            "callback": "date",
+            "value": "2024-03-29"
+        },
+        "expected": [
+            "2024-03-29",
+            ""
+        ]
+    },
+    {
+        "input": {
+            "callback": "date",
+            "value": "2024-03-30"
+        },
+        "expected": [
+            "2024-03-30",
+            "weekend"
+        ]
+    },
+    {
+        "input": {
+            "callback": "date",
+            "value": "2024-03-31"
+        },
+        "expected": [
+            "2024-03-31",
+            "weekend"
+        ]
+    },
+    {
+        "input": {
+            "callback": "date",
+            "value": "2024-04-01"
+        },
+        "expected": [
+            "2024-04-01",
+            ""
+        ]
+    },
+    {
+        "input": {
+            "callback": "date",
+            "value": "2024-03-30 23:59:59"
+        },
+        "expected": [
+            "2024-03-30 23:59:59",
+            "weekend"
+        ]
+    },
+    {
+        "input": {
+            "callback": "checksum",
+            "value": "0"
+        },
+        "expected": [
+            "0",
+            ""
+        ]
+    },
+    {
+        "input": {
+            "callback": "checksum",
+            "value": "255"
+        },
+        "expected": [
+            "FF",
+            ""
+        ]
+    },
+    {
+        "input": {
+            "callback": "checksum",
+            "value": "18446744073709551615"
+        },
+        "expected": [
+            "FFFFFFFFFFFFFFFF",
+            ""
+        ]
+    },
+    {
+        "input": {
+            "callback": "explain",
+            "value": {
+                "hostname_max": "db1.example.com",
+                "db_max": "app"
+            }
+        },
+        "expected": {
+            "port": 3306,
+            "host": "db1.example.com",
+            "db": "app",
+            "user": "root",
+            "password": ""
+        }
+    },
+    {
+        "input": {
+            "callback": "explain",
+            "value": {
+                "hostname_max": "db1.example.com:3307",
+                "db_max": ""
+            }
+        },
+        "expected": {
+            "host": "db1.example.com",
+            "port": "3307",
+            "db": "mysql",
+            "user": "root",
+            "password": ""
+        }
+    },
+    {
+        "input": {
+            "callback": "explain",
+            "value": {
+                "hostname_max": "db1",
+                "db_max": "app"
+            }
+        },
+        "expected": null
+    },
+    {
+        "input": {
+            "callback": "explain",
+            "value": {
+                "hostname_max": "10.0.0.1:3306:x",
+                "db_max": "app"
+            }
+        },
+        "expected": {
+            "host": "10.0.0.1",
+            "port": "3306",
+            "db": "app",
+            "user": "root",
+            "password": ""
+        }
+    },
+    {
+        "input": {
+            "callback": "explain",
+            "value": {
+                "db_max": "app"
+            }
+        },
+        "expected": null
+    }
+]

@@ -1,0 +1,231 @@
+[
+    {
+        "input": "action=report&datasource=localhost",
+        "expected": {
+            "action": "report",
+            "datasource": "localhost"
+        }
+    },
+    {
+        "input": "table_fields%5B%5D=checksum&table_fields%5B%5D=snippet&table_fields[]=fact.first_seen",
+        "expected": {
+            "table_fields": [
+                "checksum",
+                "snippet",
+                "fact.first_seen"
+            ]
+        }
+    },
+    {
+        "input": "a=1&a=2",
+        "expected": {
+            "a": "2"
+        }
+    },
+    {
+        "input": "a=1&a[]=2",
+        "expected": {
+            "a": [
+                "2"
+            ]
+        }
+    },
+    {
+        "input": "a[]=1&a=2",
+        "expected": {
+            "a": "2"
+        }
+    },
+    {
+        "input": "a[x]=1&a[y]=2",
+        "expected": {
+            "a": {
+                "x": "1",
+                "y": "2"
+            }
+        }
+    },
+    {
+        "input": "a[]=1&a[x]=2&a[]=3",
+        "expected": {
+            "a": {
+                "0": "1",
+                "x": "2",
+                "1": "3"
+            }
+        }
+    },
+    {
+        "input": "a[0]=x&a[1]=y",
+        "expected": {
+            "a": [
+                "x",
+                "y"
+            ]
+        }
+    },
+    {
+        "input": "a[1]=x&a[0]=y",
+        "expected": {
+            "a": {
+                "1": "x",
+                "0": "y"
+            }
+        }
+    },
+    {
+        "input": "a[2]=x&a[]=y",
+        "expected": {
+            "a": {
+                "2": "x",
+                "3": "y"
+            }
+        }
+    },
+    {
+        "input": "a[b][c]=1&a[b][d]=2",
+        "expected": {
+            "a": {
+                "b": {
+                    "c": "1",
+                    "d": "2"
+                }
+            }
+        }
+    },
+    {
+        "input": "a[b][]=1&a[b][]=2",
+        "expected": {
+            "a": {
+                "b": [
+                    "1",
+                    "2"
+                ]
+            }
+        }
+    },
+    {
+        "input": "a[]=x&a[][]=y",
+        "expected": {
+            "a": [
+                "x",
+                [
+                    "y"
+                ]
+            ]
+        }
+    },
+    {
+        "input": "my.name=1&my name=2&+lead=3",
+        "expected": {
+            "my_name": "2",
+            "lead": "3"
+        }
+    },
+    {
+        "input": "a.b[c.d]=1",
+        "expected": {
+            "a_b": {
+                "c.d": "1"
+            }
+        }
+    },
+    {
+        "input": "a[b=1",
+        "expected": {
+            "a_b": "1"
+        }
+    },
+    {
+        "input": "a]b=1",
+        "expected": {
+            "a]b": "1"
+        }
+    },
+    {
+        "input": "a[b]c=1",
+        "expected": {
+            "a": {
+                "b": "1"
+            }
+        }
+    },
+    {
+        "input": "a[b]c]=1",
+        "expected": {
+            "a": {
+                "b": "1"
+            }
+        }
+    },
+    {
+        "input": "=1&[x]=2",
+        "expected": {}
+    },
+    {
+        "input": "empty=&noval&plus=a+b&pct=a%20b%2Bc",
+        "expected": {
+            "empty": "",
+            "noval": "",
+            "plus": "a b",
+            "pct": "a b+c"
+        }
+    },
+    {
+        "input": "k=%ED%95%9C%EA%B8%80",
+        "expected": {
+            "k": "한글"
+        }
+    },
+    {
+        "input": "fact-where=%28%0D%0Ahostname_max+%3D+%27h1%27%0D%0A%29&fact-limit=100",
+        "expected": {
+            "fact-where": "(\r\nhostname_max = 'h1'\r\n)",
+            "fact-limit": "100"
+        }
+    },
+    {
+        "input": "x=1;y=2",
+        "expected": {
+            "x": "1;y=2"
+        }
+    },
+    {
+        "input": "a[ b ]=1",
+        "expected": {
+            "a": {
+                " b ": "1"
+            }
+        }
+    },
+    {
+        "input": "a[-1]=x&a[]=y",
+        "expected": {
+            "a": {
+                "-1": "x",
+                "0": "y"
+            }
+        }
+    },
+    {
+        "input": "a[07]=x&a[7]=y",
+        "expected": {
+            "a": {
+                "07": "x",
+                "7": "y"
+            }
+        }
+    },
+    {
+        "input": "a[ 5]=x",
+        "expected": {
+            "a": {
+                " 5": "x"
+            }
+        }
+    },
+    {
+        "input": "",
+        "expected": {}
+    }
+]
