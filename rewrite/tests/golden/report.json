@@ -1,0 +1,1306 @@
+[
+    {
+        "input": {
+            "report": "slow_query_log",
+            "tables": {
+                "global_query_review": "fact",
+                "global_query_review_history": "dimension"
+            },
+            "get": {
+                "fact-group": "checksum",
+                "fact-order": "Query_time_sum DESC",
+                "fact-limit": "20",
+                "dimension-ts_min_start": "2024-03-30 10:00:00",
+                "dimension-ts_min_end": "2024-03-31 10:00:00",
+                "table_fields": [
+                    "checksum",
+                    "snippet",
+                    "index_ratio",
+                    "query_time_avg",
+                    "rows_sent_avg",
+                    "ts_cnt",
+                    "Query_time_sum",
+                    "Lock_time_sum",
+                    "Rows_sent_sum",
+                    "Rows_examined_sum",
+                    "Tmp_table_sum",
+                    "Filesort_sum",
+                    "Full_scan_sum"
+                ],
+                "dimension-pivot-hostname_max": null
+            },
+            "name": "report defaults",
+            "now": "2026-11-27 11:42:12"
+        },
+        "expected": {
+            "form_fields": [
+                "fact-group",
+                "fact-order",
+                "fact-having",
+                "fact-limit",
+                "fact-first_seen",
+                "fact-where",
+                "fact-sample",
+                "fact-checksum",
+                "fact-reviewed_status",
+                "dimension-extra_fields",
+                "dimension-hostname_max",
+                "dimension-ts_min",
+                "dimension-pivot-hostname_max",
+                "dimension-pivot-checksum"
+            ],
+            "custom_fields": [
+                "checksum",
+                "date",
+                "hour",
+                "hour_ts",
+                "minute_ts",
+                "minute",
+                "snippet",
+                "index_ratio",
+                "query_time_avg",
+                "rows_sent_avg"
+            ],
+            "sql": "SELECT checksum AS `checksum`,\n  LEFT(dimension.sample,20) AS `snippet`,\n  ROUND(SUM(Rows_examined_sum)/SUM(rows_sent_sum),2) AS `index_ratio`,\n  SUM(Query_time_sum) / SUM(ts_cnt) AS `query_time_avg`,\n  ROUND(SUM(Rows_sent_sum)/SUM(ts_cnt),0) AS `rows_sent_avg`,\n  SUM(ts_cnt) AS `ts_cnt`,\n  SUM(Query_time_sum) AS `Query_time_sum`,\n  SUM(Lock_time_sum) AS `Lock_time_sum`,\n  SUM(Rows_sent_sum) AS `Rows_sent_sum`,\n  SUM(Rows_examined_sum) AS `Rows_examined_sum`,\n  SUM(Tmp_table_sum) AS `Tmp_table_sum`,\n  SUM(Filesort_sum) AS `Filesort_sum`,\n  SUM(Full_scan_sum) AS `Full_scan_sum`\n FROM `global_query_review` AS `fact` \n JOIN `global_query_review_history` AS `dimension` USING (`checksum`) \n WHERE dimension.ts_min >= \"2024-03-30 10:00:00\"\n  AND dimension.ts_min <= \"2024-03-31 10:00:00\"\n GROUP BY checksum \n ORDER BY Query_time_sum DESC \n LIMIT 20 \n",
+            "columns": [
+                "checksum",
+                "snippet",
+                "index_ratio",
+                "query_time_avg",
+                "rows_sent_avg",
+                "ts_cnt",
+                "Query_time_sum",
+                "Lock_time_sum",
+                "Rows_sent_sum",
+                "Rows_examined_sum",
+                "Tmp_table_sum",
+                "Filesort_sum",
+                "Full_scan_sum"
+            ],
+            "search_uri": "fact-group=checksum&fact-order=Query_time_sum+DESC&fact-limit=20&dimension-ts_min_start=2024-03-30+10%3A00%3A00&dimension-ts_min_end=2024-03-31+10%3A00%3A00&table_fields%5B%5D=checksum&table_fields%5B%5D=snippet&table_fields%5B%5D=index_ratio&table_fields%5B%5D=query_time_avg&table_fields%5B%5D=rows_sent_avg&table_fields%5B%5D=ts_cnt&table_fields%5B%5D=Query_time_sum&table_fields%5B%5D=Lock_time_sum&table_fields%5B%5D=Rows_sent_sum&table_fields%5B%5D=Rows_examined_sum&table_fields%5B%5D=Tmp_table_sum&table_fields%5B%5D=Filesort_sum&table_fields%5B%5D=Full_scan_sum",
+            "search_uri_except": "fact-group=checksum&fact-order=Query_time_sum+DESC&fact-limit=20&table_fields%5B%5D=checksum&table_fields%5B%5D=snippet&table_fields%5B%5D=index_ratio&table_fields%5B%5D=query_time_avg&table_fields%5B%5D=rows_sent_avg&table_fields%5B%5D=ts_cnt&table_fields%5B%5D=Query_time_sum&table_fields%5B%5D=Lock_time_sum&table_fields%5B%5D=Rows_sent_sum&table_fields%5B%5D=Rows_examined_sum&table_fields%5B%5D=Tmp_table_sum&table_fields%5B%5D=Filesort_sum&table_fields%5B%5D=Full_scan_sum"
+        }
+    },
+    {
+        "input": {
+            "report": "slow_query_log_site",
+            "tables": {
+                "global_query_review": "fact",
+                "global_query_review_history": "dimension"
+            },
+            "get": {
+                "action": "report",
+                "datasource": "localhost",
+                "dimension-ts_min_start": "-1 month",
+                "dimension-ts_min_end": "now",
+                "fact-first_seen": "",
+                "table_fields": [
+                    "checksum",
+                    "snippet",
+                    "query_time_avg",
+                    "fact.first_seen",
+                    "fact.last_seen",
+                    "fact.reviewed_by",
+                    "fact.reviewed_on",
+                    "fact.reviewed_status",
+                    "dimension.hostname_max",
+                    "dimension.db_max",
+                    "dimension.user_max",
+                    "dimension.ip_max",
+                    "dimension.ts_cnt",
+                    "dimension.Query_time_sum",
+                    "dimension.Rows_examined_max"
+                ],
+                "dimension-hostname_max": "",
+                "fact-group": "checksum",
+                "fact-order": "ts_cnt DESC, query_time_avg DESC, Rows_examined_max DESC",
+                "fact-having": "last_seen >= DATE_SUB(DATE_FORMAT(NOW(), '%Y-%m-%d 00:00:00'), INTERVAL 1 MONTH)",
+                "fact-limit": "100",
+                "submit": "Search",
+                "fact-where": "(\r\nhostname_max = '호스트네임1'\r\nor hostname_max = '호스트네임2'\r\n)\r\nand user_max not in(\r\n'dba'\r\n)",
+                "fact-sample": "",
+                "fact-reviewed_status": "",
+                "fact-checksum": ""
+            },
+            "name": "nav favourite 1",
+            "now": "2026-11-27 11:42:12"
+        },
+        "expected": {
+            "form_fields": [
+                "fact-group",
+                "fact-order",
+                "fact-having",
+                "fact-limit",
+                "fact-first_seen",
+                "fact-where",
+                "fact-sample",
+                "fact-checksum",
+                "fact-reviewed_status",
+                "dimension-extra_fields",
+                "dimension-hostname_max",
+                "dimension-ts_min",
+                "dimension-pivot-hostname_max",
+                "dimension-pivot-checksum"
+            ],
+            "custom_fields": [
+                "checksum",
+                "date",
+                "hour",
+                "hour_ts",
+                "minute_ts",
+                "minute",
+                "snippet",
+                "index_ratio",
+                "query_time_avg",
+                "rows_sent_avg",
+                "rows_examined_avg",
+                "rows_examined/sent_avg"
+            ],
+            "sql": "SELECT checksum AS `checksum`,\n  LEFT(dimension.sample,100) AS `snippet`,\n  SUM(Query_time_sum) / SUM(ts_cnt) AS `query_time_avg`,\n  fact.first_seen,\n  fact.last_seen,\n  fact.reviewed_by,\n  fact.reviewed_on,\n  fact.reviewed_status,\n  MAX(hostname_max) AS `hostname_max`,\n  MAX(db_max) AS `db_max`,\n  MAX(user_max) AS `user_max`,\n  MAX(ip_max) AS `ip_max`,\n  SUM(ts_cnt) AS `ts_cnt`,\n  SUM(Query_time_sum) AS `Query_time_sum`,\n  MAX(Rows_examined_max) AS `Rows_examined_max`\n FROM `global_query_review` AS `fact` \n JOIN `global_query_review_history` AS `dimension` USE INDEX (idx_ts_min_01) USING (`checksum`) \n WHERE dimension.ts_min >= \"2026-10-27 11:42:12\"\n  AND dimension.ts_min <= \"2026-11-27 11:42:12\"\n AND ((\r\nhostname_max = '호스트네임1'\r\nor hostname_max = '호스트네임2'\r\n)\r\nand user_max not in(\r\n'dba'\r\n))  GROUP BY checksum \n HAVING last_seen >= DATE_SUB(DATE_FORMAT(NOW(), '%Y-%m-%d 00:00:00'), INTERVAL 1 MONTH) \n ORDER BY ts_cnt DESC, query_time_avg DESC, Rows_examined_max DESC \n LIMIT 100 \n",
+            "columns": [
+                "checksum",
+                "snippet",
+                "query_time_avg",
+                "first_seen",
+                "last_seen",
+                "reviewed_by",
+                "reviewed_on",
+                "reviewed_status",
+                "hostname_max",
+                "db_max",
+                "user_max",
+                "ip_max",
+                "ts_cnt",
+                "Query_time_sum",
+                "Rows_examined_max"
+            ],
+            "search_uri": "fact-group=checksum&fact-order=ts_cnt+DESC%2C+query_time_avg+DESC%2C+Rows_examined_max+DESC&fact-having=last_seen+%3E%3D+DATE_SUB%28DATE_FORMAT%28NOW%28%29%2C+%27%25Y-%25m-%25d+00%3A00%3A00%27%29%2C+INTERVAL+1+MONTH%29&fact-limit=100&fact-where=%28%0D%0Ahostname_max+%3D+%27%ED%98%B8%EC%8A%A4%ED%8A%B8%EB%84%A4%EC%9E%841%27%0D%0Aor+hostname_max+%3D+%27%ED%98%B8%EC%8A%A4%ED%8A%B8%EB%84%A4%EC%9E%842%27%0D%0A%29%0D%0Aand+user_max+not+in%28%0D%0A%27dba%27%0D%0A%29&dimension-ts_min_start=-1+month&dimension-ts_min_end=now&table_fields%5B%5D=checksum&table_fields%5B%5D=snippet&table_fields%5B%5D=query_time_avg&table_fields%5B%5D=fact.first_seen&table_fields%5B%5D=fact.last_seen&table_fields%5B%5D=fact.reviewed_by&table_fields%5B%5D=fact.reviewed_on&table_fields%5B%5D=fact.reviewed_status&table_fields%5B%5D=dimension.hostname_max&table_fields%5B%5D=dimension.db_max&table_fields%5B%5D=dimension.user_max&table_fields%5B%5D=dimension.ip_max&table_fields%5B%5D=dimension.ts_cnt&table_fields%5B%5D=dimension.Query_time_sum&table_fields%5B%5D=dimension.Rows_examined_max",
+            "search_uri_except": "fact-group=checksum&fact-order=ts_cnt+DESC%2C+query_time_avg+DESC%2C+Rows_examined_max+DESC&fact-having=last_seen+%3E%3D+DATE_SUB%28DATE_FORMAT%28NOW%28%29%2C+%27%25Y-%25m-%25d+00%3A00%3A00%27%29%2C+INTERVAL+1+MONTH%29&fact-limit=100&fact-where=%28%0D%0Ahostname_max+%3D+%27%ED%98%B8%EC%8A%A4%ED%8A%B8%EB%84%A4%EC%9E%841%27%0D%0Aor+hostname_max+%3D+%27%ED%98%B8%EC%8A%A4%ED%8A%B8%EB%84%A4%EC%9E%842%27%0D%0A%29%0D%0Aand+user_max+not+in%28%0D%0A%27dba%27%0D%0A%29&table_fields%5B%5D=checksum&table_fields%5B%5D=snippet&table_fields%5B%5D=query_time_avg&table_fields%5B%5D=fact.first_seen&table_fields%5B%5D=fact.last_seen&table_fields%5B%5D=fact.reviewed_by&table_fields%5B%5D=fact.reviewed_on&table_fields%5B%5D=fact.reviewed_status&table_fields%5B%5D=dimension.hostname_max&table_fields%5B%5D=dimension.db_max&table_fields%5B%5D=dimension.user_max&table_fields%5B%5D=dimension.ip_max&table_fields%5B%5D=dimension.ts_cnt&table_fields%5B%5D=dimension.Query_time_sum&table_fields%5B%5D=dimension.Rows_examined_max"
+        }
+    },
+    {
+        "input": {
+            "report": "slow_query_log_site",
+            "tables": {
+                "global_query_review": "fact",
+                "global_query_review_history": "dimension"
+            },
+            "get": {
+                "action": "report",
+                "datasource": "localhost",
+                "dimension-ts_min_start": "-1 month",
+                "dimension-ts_min_end": "now",
+                "fact-first_seen": "",
+                "table_fields": [
+                    "checksum",
+                    "snippet",
+                    "index_ratio",
+                    "query_time_avg",
+                    "dimension.ts_cnt",
+                    "dimension.Query_time_sum",
+                    "rows_examined_avg",
+                    "rows_sent_avg",
+                    "rows_examined/sent_avg",
+                    "fact.first_seen",
+                    "fact.last_seen",
+                    "dimension.hostname_max",
+                    "dimension.db_max",
+                    "dimension.user_max",
+                    "dimension.ip_max",
+                    "fact.reviewed_by",
+                    "fact.reviewed_on",
+                    "fact.reviewed_status"
+                ],
+                "dimension-hostname_max": "",
+                "fact-group": "checksum",
+                "fact-order": "`rows_examined/sent_avg` DESC, ts_cnt DESC, query_time_avg DESC, Rows_examined_max DESC",
+                "fact-having": "last_seen >= DATE_SUB(DATE_FORMAT(NOW(), '%Y-%m-%d 00:00:00'), INTERVAL 3 MONTH) and (`rows_examined/sent_avg` > 10 or `rows_examined/sent_avg` is null or query_time_avg > 10  or ts_cnt > 1000)",
+                "fact-limit": "500",
+                "submit": "Search",
+                "fact-where": "hostname_max in (\r\n'db1.example.com'\r\n)",
+                "fact-sample": "",
+                "fact-reviewed_status": "",
+                "fact-checksum": ""
+            },
+            "name": "nav favourite 2",
+            "now": "2026-11-27 11:42:12"
+        },
+        "expected": {
+            "form_fields": [
+                "fact-group",
+                "fact-order",
+                "fact-having",
+                "fact-limit",
+                "fact-first_seen",
+                "fact-where",
+                "fact-sample",
+                "fact-checksum",
+                "fact-reviewed_status",
+                "dimension-extra_fields",
+                "dimension-hostname_max",
+                "dimension-ts_min",
+                "dimension-pivot-hostname_max",
+                "dimension-pivot-checksum"
+            ],
+            "custom_fields": [
+                "checksum",
+                "date",
+                "hour",
+                "hour_ts",
+                "minute_ts",
+                "minute",
+                "snippet",
+                "index_ratio",
+                "query_time_avg",
+                "rows_sent_avg",
+                "rows_examined_avg",
+                "rows_examined/sent_avg"
+            ],
+            "sql": "SELECT checksum AS `checksum`,\n  LEFT(dimension.sample,100) AS `snippet`,\n  ROUND(SUM(Rows_examined_sum)/SUM(rows_sent_sum),2) AS `index_ratio`,\n  SUM(Query_time_sum) / SUM(ts_cnt) AS `query_time_avg`,\n  SUM(ts_cnt) AS `ts_cnt`,\n  SUM(Query_time_sum) AS `Query_time_sum`,\n  ROUND(SUM(Rows_examined_sum)/SUM(ts_cnt),0) AS `rows_examined_avg`,\n  ROUND(SUM(Rows_sent_sum)/SUM(ts_cnt),0) AS `rows_sent_avg`,\n  ROUND(SUM(Rows_examined_sum)/SUM(Rows_sent_sum)/SUM(ts_cnt),0) AS `rows_examined/sent_avg`,\n  fact.first_seen,\n  fact.last_seen,\n  MAX(hostname_max) AS `hostname_max`,\n  MAX(db_max) AS `db_max`,\n  MAX(user_max) AS `user_max`,\n  MAX(ip_max) AS `ip_max`,\n  fact.reviewed_by,\n  fact.reviewed_on,\n  fact.reviewed_status\n FROM `global_query_review` AS `fact` \n JOIN `global_query_review_history` AS `dimension` USE INDEX (idx_ts_min_01) USING (`checksum`) \n WHERE dimension.ts_min >= \"2026-10-27 11:42:12\"\n  AND dimension.ts_min <= \"2026-11-27 11:42:12\"\n AND (hostname_max in (\r\n'db1.example.com'\r\n))  GROUP BY checksum \n HAVING last_seen >= DATE_SUB(DATE_FORMAT(NOW(), '%Y-%m-%d 00:00:00'), INTERVAL 3 MONTH) and (`rows_examined/sent_avg` > 10 or `rows_examined/sent_avg` is null or query_time_avg > 10  or ts_cnt > 1000) \n ORDER BY `rows_examined/sent_avg` DESC, ts_cnt DESC, query_time_avg DESC, Rows_examined_max DESC \n LIMIT 500 \n",
+            "columns": [
+                "checksum",
+                "snippet",
+                "index_ratio",
+                "query_time_avg",
+                "ts_cnt",
+                "Query_time_sum",
+                "rows_examined_avg",
+                "rows_sent_avg",
+                "rows_examined/sent_avg",
+                "first_seen",
+                "last_seen",
+                "hostname_max",
+                "db_max",
+                "user_max",
+                "ip_max",
+                "reviewed_by",
+                "reviewed_on",
+                "reviewed_status"
+            ],
+            "search_uri": "fact-group=checksum&fact-order=%60rows_examined%2Fsent_avg%60+DESC%2C+ts_cnt+DESC%2C+query_time_avg+DESC%2C+Rows_examined_max+DESC&fact-having=last_seen+%3E%3D+DATE_SUB%28DATE_FORMAT%28NOW%28%29%2C+%27%25Y-%25m-%25d+00%3A00%3A00%27%29%2C+INTERVAL+3+MONTH%29+and+%28%60rows_examined%2Fsent_avg%60+%3E+10+or+%60rows_examined%2Fsent_avg%60+is+null+or+query_time_avg+%3E+10++or+ts_cnt+%3E+1000%29&fact-limit=500&fact-where=hostname_max+in+%28%0D%0A%27db1.example.com%27%0D%0A%29&dimension-ts_min_start=-1+month&dimension-ts_min_end=now&table_fields%5B%5D=checksum&table_fields%5B%5D=snippet&table_fields%5B%5D=index_ratio&table_fields%5B%5D=query_time_avg&table_fields%5B%5D=dimension.ts_cnt&table_fields%5B%5D=dimension.Query_time_sum&table_fields%5B%5D=rows_examined_avg&table_fields%5B%5D=rows_sent_avg&table_fields%5B%5D=rows_examined/sent_avg&table_fields%5B%5D=fact.first_seen&table_fields%5B%5D=fact.last_seen&table_fields%5B%5D=dimension.hostname_max&table_fields%5B%5D=dimension.db_max&table_fields%5B%5D=dimension.user_max&table_fields%5B%5D=dimension.ip_max&table_fields%5B%5D=fact.reviewed_by&table_fields%5B%5D=fact.reviewed_on&table_fields%5B%5D=fact.reviewed_status",
+            "search_uri_except": "fact-group=checksum&fact-order=%60rows_examined%2Fsent_avg%60+DESC%2C+ts_cnt+DESC%2C+query_time_avg+DESC%2C+Rows_examined_max+DESC&fact-having=last_seen+%3E%3D+DATE_SUB%28DATE_FORMAT%28NOW%28%29%2C+%27%25Y-%25m-%25d+00%3A00%3A00%27%29%2C+INTERVAL+3+MONTH%29+and+%28%60rows_examined%2Fsent_avg%60+%3E+10+or+%60rows_examined%2Fsent_avg%60+is+null+or+query_time_avg+%3E+10++or+ts_cnt+%3E+1000%29&fact-limit=500&fact-where=hostname_max+in+%28%0D%0A%27db1.example.com%27%0D%0A%29&table_fields%5B%5D=checksum&table_fields%5B%5D=snippet&table_fields%5B%5D=index_ratio&table_fields%5B%5D=query_time_avg&table_fields%5B%5D=dimension.ts_cnt&table_fields%5B%5D=dimension.Query_time_sum&table_fields%5B%5D=rows_examined_avg&table_fields%5B%5D=rows_sent_avg&table_fields%5B%5D=rows_examined/sent_avg&table_fields%5B%5D=fact.first_seen&table_fields%5B%5D=fact.last_seen&table_fields%5B%5D=dimension.hostname_max&table_fields%5B%5D=dimension.db_max&table_fields%5B%5D=dimension.user_max&table_fields%5B%5D=dimension.ip_max&table_fields%5B%5D=fact.reviewed_by&table_fields%5B%5D=fact.reviewed_on&table_fields%5B%5D=fact.reviewed_status"
+        }
+    },
+    {
+        "input": {
+            "report": "slow_query_log",
+            "tables": {
+                "global_query_review": "fact",
+                "global_query_review_history": "dimension"
+            },
+            "get": {
+                "action": "report",
+                "datasource": "localhost",
+                "dimension-ts_min_start": "-1 month",
+                "dimension-ts_min_end": "now",
+                "fact-first_seen": "",
+                "table_fields": [
+                    "checksum",
+                    "snippet",
+                    "index_ratio",
+                    "query_time_avg",
+                    "dimension.ts_cnt",
+                    "dimension.Query_time_sum",
+                    "rows_examined_avg",
+                    "rows_sent_avg",
+                    "rows_examined/sent_avg",
+                    "fact.first_seen",
+                    "fact.last_seen",
+                    "dimension.hostname_max",
+                    "dimension.db_max",
+                    "dimension.user_max",
+                    "dimension.ip_max",
+                    "fact.reviewed_by",
+                    "fact.reviewed_on",
+                    "fact.reviewed_status"
+                ],
+                "dimension-hostname_max": "",
+                "fact-group": "checksum",
+                "fact-order": "`rows_examined/sent_avg` DESC, ts_cnt DESC, query_time_avg DESC, Rows_examined_max DESC",
+                "fact-having": "last_seen >= DATE_SUB(DATE_FORMAT(NOW(), '%Y-%m-%d 00:00:00'), INTERVAL 3 MONTH) and (`rows_examined/sent_avg` > 10 or `rows_examined/sent_avg` is null or query_time_avg > 10  or ts_cnt > 1000)",
+                "fact-limit": "500",
+                "submit": "Search",
+                "fact-where": "hostname_max in (\r\n'db1.example.com'\r\n)",
+                "fact-sample": "",
+                "fact-reviewed_status": "",
+                "fact-checksum": ""
+            },
+            "name": "nav favourite 2 sample report",
+            "now": "2026-11-27 11:42:12"
+        },
+        "expected": {
+            "form_fields": [
+                "fact-group",
+                "fact-order",
+                "fact-having",
+                "fact-limit",
+                "fact-first_seen",
+                "fact-where",
+                "fact-sample",
+                "fact-checksum",
+                "fact-reviewed_status",
+                "dimension-extra_fields",
+                "dimension-hostname_max",
+                "dimension-ts_min",
+                "dimension-pivot-hostname_max",
+                "dimension-pivot-checksum"
+            ],
+            "custom_fields": [
+                "checksum",
+                "date",
+                "hour",
+                "hour_ts",
+                "minute_ts",
+                "minute",
+                "snippet",
+                "index_ratio",
+                "query_time_avg",
+                "rows_sent_avg"
+            ],
+            "sql": "SELECT checksum AS `checksum`,\n  LEFT(dimension.sample,20) AS `snippet`,\n  ROUND(SUM(Rows_examined_sum)/SUM(rows_sent_sum),2) AS `index_ratio`,\n  SUM(Query_time_sum) / SUM(ts_cnt) AS `query_time_avg`,\n  SUM(ts_cnt) AS `ts_cnt`,\n  SUM(Query_time_sum) AS `Query_time_sum`,\n  AVG(rows_examined_avg) AS `rows_examined_avg`,\n  ROUND(SUM(Rows_sent_sum)/SUM(ts_cnt),0) AS `rows_sent_avg`,\n  AVG(rows_examined/sent_avg) AS `rows_examined/sent_avg`,\n  fact.first_seen,\n  fact.last_seen,\n  MAX(hostname_max) AS `hostname_max`,\n  MAX(db_max) AS `db_max`,\n  MAX(user_max) AS `user_max`,\n  MAX(ip_max) AS `ip_max`,\n  fact.reviewed_by,\n  fact.reviewed_on,\n  fact.reviewed_status\n FROM `global_query_review` AS `fact` \n JOIN `global_query_review_history` AS `dimension` USING (`checksum`) \n WHERE dimension.ts_min >= \"2026-10-27 11:42:12\"\n  AND dimension.ts_min <= \"2026-11-27 11:42:12\"\n AND (hostname_max in (\r\n'db1.example.com'\r\n))  GROUP BY checksum \n HAVING last_seen >= DATE_SUB(DATE_FORMAT(NOW(), '%Y-%m-%d 00:00:00'), INTERVAL 3 MONTH) and (`rows_examined/sent_avg` > 10 or `rows_examined/sent_avg` is null or query_time_avg > 10  or ts_cnt > 1000) \n ORDER BY `rows_examined/sent_avg` DESC, ts_cnt DESC, query_time_avg DESC, Rows_examined_max DESC \n LIMIT 500 \n",
+            "columns": [
+                "checksum",
+                "snippet",
+                "index_ratio",
+                "query_time_avg",
+                "ts_cnt",
+                "Query_time_sum",
+                "rows_examined_avg",
+                "rows_sent_avg",
+                "rows_examined/sent_avg",
+                "first_seen",
+                "last_seen",
+                "hostname_max",
+                "db_max",
+                "user_max",
+                "ip_max",
+                "reviewed_by",
+                "reviewed_on",
+                "reviewed_status"
+            ],
+            "search_uri": "fact-group=checksum&fact-order=%60rows_examined%2Fsent_avg%60+DESC%2C+ts_cnt+DESC%2C+query_time_avg+DESC%2C+Rows_examined_max+DESC&fact-having=last_seen+%3E%3D+DATE_SUB%28DATE_FORMAT%28NOW%28%29%2C+%27%25Y-%25m-%25d+00%3A00%3A00%27%29%2C+INTERVAL+3+MONTH%29+and+%28%60rows_examined%2Fsent_avg%60+%3E+10+or+%60rows_examined%2Fsent_avg%60+is+null+or+query_time_avg+%3E+10++or+ts_cnt+%3E+1000%29&fact-limit=500&fact-where=hostname_max+in+%28%0D%0A%27db1.example.com%27%0D%0A%29&dimension-ts_min_start=-1+month&dimension-ts_min_end=now&table_fields%5B%5D=checksum&table_fields%5B%5D=snippet&table_fields%5B%5D=index_ratio&table_fields%5B%5D=query_time_avg&table_fields%5B%5D=dimension.ts_cnt&table_fields%5B%5D=dimension.Query_time_sum&table_fields%5B%5D=rows_examined_avg&table_fields%5B%5D=rows_sent_avg&table_fields%5B%5D=rows_examined/sent_avg&table_fields%5B%5D=fact.first_seen&table_fields%5B%5D=fact.last_seen&table_fields%5B%5D=dimension.hostname_max&table_fields%5B%5D=dimension.db_max&table_fields%5B%5D=dimension.user_max&table_fields%5B%5D=dimension.ip_max&table_fields%5B%5D=fact.reviewed_by&table_fields%5B%5D=fact.reviewed_on&table_fields%5B%5D=fact.reviewed_status",
+            "search_uri_except": "fact-group=checksum&fact-order=%60rows_examined%2Fsent_avg%60+DESC%2C+ts_cnt+DESC%2C+query_time_avg+DESC%2C+Rows_examined_max+DESC&fact-having=last_seen+%3E%3D+DATE_SUB%28DATE_FORMAT%28NOW%28%29%2C+%27%25Y-%25m-%25d+00%3A00%3A00%27%29%2C+INTERVAL+3+MONTH%29+and+%28%60rows_examined%2Fsent_avg%60+%3E+10+or+%60rows_examined%2Fsent_avg%60+is+null+or+query_time_avg+%3E+10++or+ts_cnt+%3E+1000%29&fact-limit=500&fact-where=hostname_max+in+%28%0D%0A%27db1.example.com%27%0D%0A%29&table_fields%5B%5D=checksum&table_fields%5B%5D=snippet&table_fields%5B%5D=index_ratio&table_fields%5B%5D=query_time_avg&table_fields%5B%5D=dimension.ts_cnt&table_fields%5B%5D=dimension.Query_time_sum&table_fields%5B%5D=rows_examined_avg&table_fields%5B%5D=rows_sent_avg&table_fields%5B%5D=rows_examined/sent_avg&table_fields%5B%5D=fact.first_seen&table_fields%5B%5D=fact.last_seen&table_fields%5B%5D=dimension.hostname_max&table_fields%5B%5D=dimension.db_max&table_fields%5B%5D=dimension.user_max&table_fields%5B%5D=dimension.ip_max&table_fields%5B%5D=fact.reviewed_by&table_fields%5B%5D=fact.reviewed_on&table_fields%5B%5D=fact.reviewed_status"
+        }
+    },
+    {
+        "input": {
+            "report": "slow_query_log",
+            "tables": {
+                "global_query_review": "fact",
+                "global_query_review_history": "dimension"
+            },
+            "get": {
+                "output": "table",
+                "fact-group": "date",
+                "fact-order": "date DESC",
+                "fact-limit": "90",
+                "fact-checksum": "0123456789ABCDEF0123456789ABCDEF",
+                "table_fields": [
+                    "date",
+                    "index_ratio",
+                    "query_time_avg",
+                    "rows_sent_avg",
+                    "ts_cnt",
+                    "Query_time_sum",
+                    "Lock_time_sum",
+                    "Rows_sent_sum",
+                    "Rows_examined_sum",
+                    "Tmp_table_sum",
+                    "Filesort_sum",
+                    "Full_scan_sum"
+                ]
+            },
+            "name": "history defaults",
+            "now": "2026-11-27 11:42:12"
+        },
+        "expected": {
+            "form_fields": [
+                "fact-group",
+                "fact-order",
+                "fact-having",
+                "fact-limit",
+                "fact-first_seen",
+                "fact-where",
+                "fact-sample",
+                "fact-checksum",
+                "fact-reviewed_status",
+                "dimension-extra_fields",
+                "dimension-hostname_max",
+                "dimension-ts_min",
+                "dimension-pivot-hostname_max",
+                "dimension-pivot-checksum"
+            ],
+            "custom_fields": [
+                "checksum",
+                "date",
+                "hour",
+                "hour_ts",
+                "minute_ts",
+                "minute",
+                "snippet",
+                "index_ratio",
+                "query_time_avg",
+                "rows_sent_avg"
+            ],
+            "sql": "SELECT DATE(ts_min) AS `date`,\n  ROUND(SUM(Rows_examined_sum)/SUM(rows_sent_sum),2) AS `index_ratio`,\n  SUM(Query_time_sum) / SUM(ts_cnt) AS `query_time_avg`,\n  ROUND(SUM(Rows_sent_sum)/SUM(ts_cnt),0) AS `rows_sent_avg`,\n  SUM(ts_cnt) AS `ts_cnt`,\n  SUM(Query_time_sum) AS `Query_time_sum`,\n  SUM(Lock_time_sum) AS `Lock_time_sum`,\n  SUM(Rows_sent_sum) AS `Rows_sent_sum`,\n  SUM(Rows_examined_sum) AS `Rows_examined_sum`,\n  SUM(Tmp_table_sum) AS `Tmp_table_sum`,\n  SUM(Filesort_sum) AS `Filesort_sum`,\n  SUM(Full_scan_sum) AS `Full_scan_sum`\n FROM `global_query_review` AS `fact` \n JOIN `global_query_review_history` AS `dimension` USING (`checksum`) \n WHERE checksum = \"0123456789ABCDEF0123456789ABCDEF\"\n GROUP BY date \n ORDER BY date DESC \n LIMIT 90 \n",
+            "columns": [
+                "date",
+                "index_ratio",
+                "query_time_avg",
+                "rows_sent_avg",
+                "ts_cnt",
+                "Query_time_sum",
+                "Lock_time_sum",
+                "Rows_sent_sum",
+                "Rows_examined_sum",
+                "Tmp_table_sum",
+                "Filesort_sum",
+                "Full_scan_sum"
+            ],
+            "search_uri": "fact-group=date&fact-order=date+DESC&fact-limit=90&fact-checksum=0123456789ABCDEF0123456789ABCDEF&table_fields%5B%5D=date&table_fields%5B%5D=index_ratio&table_fields%5B%5D=query_time_avg&table_fields%5B%5D=rows_sent_avg&table_fields%5B%5D=ts_cnt&table_fields%5B%5D=Query_time_sum&table_fields%5B%5D=Lock_time_sum&table_fields%5B%5D=Rows_sent_sum&table_fields%5B%5D=Rows_examined_sum&table_fields%5B%5D=Tmp_table_sum&table_fields%5B%5D=Filesort_sum&table_fields%5B%5D=Full_scan_sum",
+            "search_uri_except": "fact-group=date&fact-order=date+DESC&fact-limit=90&fact-checksum=0123456789ABCDEF0123456789ABCDEF&table_fields%5B%5D=date&table_fields%5B%5D=index_ratio&table_fields%5B%5D=query_time_avg&table_fields%5B%5D=rows_sent_avg&table_fields%5B%5D=ts_cnt&table_fields%5B%5D=Query_time_sum&table_fields%5B%5D=Lock_time_sum&table_fields%5B%5D=Rows_sent_sum&table_fields%5B%5D=Rows_examined_sum&table_fields%5B%5D=Tmp_table_sum&table_fields%5B%5D=Filesort_sum&table_fields%5B%5D=Full_scan_sum"
+        }
+    },
+    {
+        "input": {
+            "report": "slow_query_log",
+            "tables": {
+                "global_query_review": "fact",
+                "global_query_review_history": "dimension"
+            },
+            "get": {
+                "fact-group": "minute_ts",
+                "fact-order": "minute_ts",
+                "fact-limit": "",
+                "dimension-ts_min_start": "2024-03-24 10:00:00",
+                "dimension-ts_min_end": "2024-03-31 10:00:00",
+                "table_fields": [
+                    "minute_ts",
+                    "Query_time_sum"
+                ],
+                "plot_field": "Query_time_sum",
+                "dimension-pivot-hostname_max": "Query_time_sum"
+            },
+            "pivot": {
+                "dimension-pivot-hostname_max": [
+                    "db1.example.com",
+                    "db2.example.com",
+                    "o'neil\\host",
+                    null,
+                    ""
+                ]
+            },
+            "uri_exceptions": [
+                "dimension-ts_min"
+            ],
+            "name": "graph with host pivot",
+            "now": "2026-11-27 11:42:12"
+        },
+        "expected": {
+            "form_fields": [
+                "fact-group",
+                "fact-order",
+                "fact-having",
+                "fact-limit",
+                "fact-first_seen",
+                "fact-where",
+                "fact-sample",
+                "fact-checksum",
+                "fact-reviewed_status",
+                "dimension-extra_fields",
+                "dimension-hostname_max",
+                "dimension-ts_min",
+                "dimension-pivot-hostname_max",
+                "dimension-pivot-checksum"
+            ],
+            "custom_fields": [
+                "checksum",
+                "date",
+                "hour",
+                "hour_ts",
+                "minute_ts",
+                "minute",
+                "snippet",
+                "index_ratio",
+                "query_time_avg",
+                "rows_sent_avg"
+            ],
+            "sql": "SELECT round(unix_timestamp(substring(ts_min,1,16))) AS `minute_ts`,\n  SUM(Query_time_sum) AS `Query_time_sum`,\n  SUM(IF(dimension.hostname_max='db1.example.com',Query_time_sum,0)) AS `db1.example.com`,\n  SUM(IF(dimension.hostname_max='db2.example.com',Query_time_sum,0)) AS `db2.example.com`,\n  SUM(IF(dimension.hostname_max='o\\'neil\\\\host',Query_time_sum,0)) AS `o'neil\\host`,\n  SUM(IF(dimension.hostname_max='',Query_time_sum,0)) AS `IF(dimension.hostname_max='',Query_time_sum,0)`,\n  SUM(IF(dimension.hostname_max='',Query_time_sum,0)) AS ``\n FROM `global_query_review` AS `fact` \n JOIN `global_query_review_history` AS `dimension` USING (`checksum`) \n WHERE dimension.ts_min >= \"2024-03-24 10:00:00\"\n  AND dimension.ts_min <= \"2024-03-31 10:00:00\"\n GROUP BY minute_ts \n ORDER BY minute_ts \n",
+            "columns": [
+                "minute_ts",
+                "Query_time_sum",
+                "db1.example.com",
+                "db2.example.com",
+                "o'neil\\host",
+                "IF(dimension.hostname_max='',Query_time_sum,0)",
+                "IF(dimension.hostname_max='',Query_time_sum,0)"
+            ],
+            "search_uri": "fact-group=minute_ts&fact-order=minute_ts&dimension-ts_min_start=2024-03-24+10%3A00%3A00&dimension-ts_min_end=2024-03-31+10%3A00%3A00&dimension-pivot-hostname_max=Query_time_sum&table_fields%5B%5D=minute_ts&table_fields%5B%5D=Query_time_sum",
+            "search_uri_except": "fact-group=minute_ts&fact-order=minute_ts&dimension-pivot-hostname_max=Query_time_sum&table_fields%5B%5D=minute_ts&table_fields%5B%5D=Query_time_sum"
+        }
+    },
+    {
+        "input": {
+            "report": "slow_query_log",
+            "tables": {
+                "global_query_review": "fact",
+                "global_query_review_history": "dimension"
+            },
+            "get": {
+                "fact-group": "hour_ts",
+                "table_fields": [
+                    "hour_ts"
+                ],
+                "dimension-pivot-checksum": "query_time_avg",
+                "fact-checksum": ""
+            },
+            "pivot": {
+                "dimension-pivot-checksum": [
+                    "AAA",
+                    "B$1\\2",
+                    null
+                ]
+            },
+            "name": "checksum pivot on custom field",
+            "now": "2026-11-27 11:42:12"
+        },
+        "expected": {
+            "form_fields": [
+                "fact-group",
+                "fact-order",
+                "fact-having",
+                "fact-limit",
+                "fact-first_seen",
+                "fact-where",
+                "fact-sample",
+                "fact-checksum",
+                "fact-reviewed_status",
+                "dimension-extra_fields",
+                "dimension-hostname_max",
+                "dimension-ts_min",
+                "dimension-pivot-hostname_max",
+                "dimension-pivot-checksum"
+            ],
+            "custom_fields": [
+                "checksum",
+                "date",
+                "hour",
+                "hour_ts",
+                "minute_ts",
+                "minute",
+                "snippet",
+                "index_ratio",
+                "query_time_avg",
+                "rows_sent_avg"
+            ],
+            "sql": "SELECT round(unix_timestamp(substring(ts_min,1,13))) AS `hour_ts`,\n  SUM(IF(dimension.checksum='AAA',Query_time_sum,0)) / SUM(IF(dimension.checksum='AAA',ts_cnt,0)) AS `AAA`,\n  SUM(IF(dimension.checksum='BSUM\\2',Query_time_sum,0)) / SUM(IF(dimension.checksum='BSUM\\2',ts_cnt,0)) AS `B$1\\2`,\n  SUM(IF(dimension.checksum='',Query_time_sum,0)) / SUM(IF(dimension.checksum='',ts_cnt,0))\n FROM `global_query_review` AS `fact` \n JOIN `global_query_review_history` AS `dimension` USING (`checksum`) \n GROUP BY hour_ts \n",
+            "columns": [
+                "hour_ts",
+                "AAA",
+                "B$1\\2",
+                "SUM(IF(dimension.checksum='',Query_time_sum,0)) / SUM(IF(dimension.checksum='',ts_cnt,0))"
+            ],
+            "search_uri": "fact-group=hour_ts&dimension-pivot-checksum=query_time_avg&table_fields%5B%5D=hour_ts",
+            "search_uri_except": "fact-group=hour_ts&dimension-pivot-checksum=query_time_avg&table_fields%5B%5D=hour_ts"
+        }
+    },
+    {
+        "input": {
+            "report": "slow_query_log",
+            "tables": {
+                "global_query_review": "fact",
+                "global_query_review_history": "dimension"
+            },
+            "get": {
+                "table_fields": [
+                    "hour"
+                ],
+                "dimension-pivot-hostname_max": "snippet"
+            },
+            "pivot": {
+                "dimension-pivot-hostname_max": [
+                    "h1"
+                ]
+            },
+            "name": "custom pivot without aggregate",
+            "now": "2026-11-27 11:42:12"
+        },
+        "expected": {
+            "form_fields": [
+                "fact-group",
+                "fact-order",
+                "fact-having",
+                "fact-limit",
+                "fact-first_seen",
+                "fact-where",
+                "fact-sample",
+                "fact-checksum",
+                "fact-reviewed_status",
+                "dimension-extra_fields",
+                "dimension-hostname_max",
+                "dimension-ts_min",
+                "dimension-pivot-hostname_max",
+                "dimension-pivot-checksum"
+            ],
+            "custom_fields": [
+                "checksum",
+                "date",
+                "hour",
+                "hour_ts",
+                "minute_ts",
+                "minute",
+                "snippet",
+                "index_ratio",
+                "query_time_avg",
+                "rows_sent_avg"
+            ],
+            "sql": "SELECT substring(ts_min,1,13) AS `hour`,\n  LEFT(dimension.sample,20) AS `h1`\n FROM `global_query_review` AS `fact` \n JOIN `global_query_review_history` AS `dimension` USING (`checksum`) \n",
+            "columns": [
+                "hour",
+                "h1"
+            ],
+            "search_uri": "dimension-pivot-hostname_max=snippet&table_fields%5B%5D=hour",
+            "search_uri_except": "dimension-pivot-hostname_max=snippet&table_fields%5B%5D=hour"
+        }
+    },
+    {
+        "input": {
+            "report": "slow_query_log",
+            "tables": {
+                "global_query_review": "fact",
+                "global_query_review_history": "dimension"
+            },
+            "get": {
+                "table_fields": [
+                    "hour"
+                ],
+                "dimension-pivot-hostname_max": "ts_cnt"
+            },
+            "name": "pivot without values",
+            "now": "2026-11-27 11:42:12"
+        },
+        "expected": {
+            "form_fields": [
+                "fact-group",
+                "fact-order",
+                "fact-having",
+                "fact-limit",
+                "fact-first_seen",
+                "fact-where",
+                "fact-sample",
+                "fact-checksum",
+                "fact-reviewed_status",
+                "dimension-extra_fields",
+                "dimension-hostname_max",
+                "dimension-ts_min",
+                "dimension-pivot-hostname_max",
+                "dimension-pivot-checksum"
+            ],
+            "custom_fields": [
+                "checksum",
+                "date",
+                "hour",
+                "hour_ts",
+                "minute_ts",
+                "minute",
+                "snippet",
+                "index_ratio",
+                "query_time_avg",
+                "rows_sent_avg"
+            ],
+            "sql": "SELECT substring(ts_min,1,13) AS `hour`\n FROM `global_query_review` AS `fact` \n JOIN `global_query_review_history` AS `dimension` USING (`checksum`) \n",
+            "columns": [
+                "hour"
+            ],
+            "search_uri": "dimension-pivot-hostname_max=ts_cnt&table_fields%5B%5D=hour",
+            "search_uri_except": "dimension-pivot-hostname_max=ts_cnt&table_fields%5B%5D=hour"
+        }
+    },
+    {
+        "input": {
+            "report": "slow_query_log",
+            "tables": {
+                "global_query_review": "fact",
+                "global_query_review_history": "dimension"
+            },
+            "get": {
+                "table_fields": [
+                    "checksum",
+                    "fact.sample",
+                    "dimension.hostname_max",
+                    "ts_min",
+                    "Query_time_pct_95",
+                    "Query_time_median",
+                    "Query_time_stddev",
+                    "Rows_sent_min",
+                    "COUNT_STAR",
+                    "LAST_SEEN_x",
+                    "FIRST_y_z",
+                    "nounderscore",
+                    "a.b.c",
+                    "checksum"
+                ],
+                "fact-sample": "SELECT ~ \"x\" & y",
+                "fact-first_seen": "2024-01-01",
+                "fact-checksum": "0",
+                "fact-reviewed_status": "needs-fix",
+                "dimension-hostname_max": "한글.example.com",
+                "dimension-extra_fields": "",
+                "fact-where": "db_max = \"app\"",
+                "fact-having": "ts_cnt > 1",
+                "fact-limit": "0",
+                "fact-order": "",
+                "fact-group": "checksum"
+            },
+            "uri_exceptions": [
+                "fact-sample",
+                "dimension-ts_min"
+            ],
+            "name": "filters",
+            "now": "2026-11-27 11:42:12"
+        },
+        "expected": {
+            "form_fields": [
+                "fact-group",
+                "fact-order",
+                "fact-having",
+                "fact-limit",
+                "fact-first_seen",
+                "fact-where",
+                "fact-sample",
+                "fact-checksum",
+                "fact-reviewed_status",
+                "dimension-extra_fields",
+                "dimension-hostname_max",
+                "dimension-ts_min",
+                "dimension-pivot-hostname_max",
+                "dimension-pivot-checksum"
+            ],
+            "custom_fields": [
+                "checksum",
+                "date",
+                "hour",
+                "hour_ts",
+                "minute_ts",
+                "minute",
+                "snippet",
+                "index_ratio",
+                "query_time_avg",
+                "rows_sent_avg"
+            ],
+            "sql": "SELECT checksum AS `checksum`,\n  fact.sample,\n  MAX(hostname_max) AS `hostname_max`,\n  MIN(ts_min) AS `ts_min`,\n  AVG(Query_time_pct_95) AS `Query_time_pct_95`,\n  AVG(Query_time_median) AS `Query_time_median`,\n  MIN(Query_time_stddev) AS `Query_time_stddev`,\n  MIN(Rows_sent_min) AS `Rows_sent_min`,\n  SUM(COUNT_STAR) AS `COUNT_STAR`,\n  MAX(LAST_SEEN_x) AS `LAST_SEEN_x`,\n  MIN(FIRST_y_z) AS `FIRST_y_z`,\n  nounderscore,\n  a.b.c\n FROM `global_query_review` AS `fact` \n JOIN `global_query_review_history` AS `dimension` USING (`checksum`) \n WHERE fact.first_seen >= \"2024-01-01\"\n  AND fact.sample LIKE \"%SELECT ~ \"x\" & y%\"\n  AND checksum = \"0\"\n  AND fact.reviewed_status = \"needs-fix\"\n  AND dimension.extra_fields = \"\"\n  AND dimension.hostname_max = \"한글.example.com\"\n AND (db_max = \"app\")  GROUP BY checksum \n HAVING ts_cnt > 1 \n LIMIT 0 \n",
+            "columns": [
+                "checksum",
+                "sample",
+                "hostname_max",
+                "ts_min",
+                "Query_time_pct_95",
+                "Query_time_median",
+                "Query_time_stddev",
+                "Rows_sent_min",
+                "COUNT_STAR",
+                "LAST_SEEN_x",
+                "FIRST_y_z",
+                "nounderscore",
+                "a.b.c"
+            ],
+            "search_uri": "fact-group=checksum&fact-having=ts_cnt+%3E+1&fact-limit=0&fact-first_seen=2024-01-01&fact-where=db_max+%3D+%22app%22&fact-sample=SELECT+%7E+%22x%22+%26+y&fact-checksum=0&fact-reviewed_status=needs-fix&dimension-hostname_max=%ED%95%9C%EA%B8%80.example.com&table_fields%5B%5D=checksum&table_fields%5B%5D=fact.sample&table_fields%5B%5D=dimension.hostname_max&table_fields%5B%5D=ts_min&table_fields%5B%5D=Query_time_pct_95&table_fields%5B%5D=Query_time_median&table_fields%5B%5D=Query_time_stddev&table_fields%5B%5D=Rows_sent_min&table_fields%5B%5D=COUNT_STAR&table_fields%5B%5D=LAST_SEEN_x&table_fields%5B%5D=FIRST_y_z&table_fields%5B%5D=nounderscore&table_fields%5B%5D=a.b.c&table_fields%5B%5D=checksum",
+            "search_uri_except": "fact-group=checksum&fact-having=ts_cnt+%3E+1&fact-limit=0&fact-first_seen=2024-01-01&fact-where=db_max+%3D+%22app%22&fact-checksum=0&fact-reviewed_status=needs-fix&dimension-hostname_max=%ED%95%9C%EA%B8%80.example.com&table_fields%5B%5D=checksum&table_fields%5B%5D=fact.sample&table_fields%5B%5D=dimension.hostname_max&table_fields%5B%5D=ts_min&table_fields%5B%5D=Query_time_pct_95&table_fields%5B%5D=Query_time_median&table_fields%5B%5D=Query_time_stddev&table_fields%5B%5D=Rows_sent_min&table_fields%5B%5D=COUNT_STAR&table_fields%5B%5D=LAST_SEEN_x&table_fields%5B%5D=FIRST_y_z&table_fields%5B%5D=nounderscore&table_fields%5B%5D=a.b.c&table_fields%5B%5D=checksum"
+        }
+    },
+    {
+        "input": {
+            "report": "slow_query_log",
+            "tables": {
+                "global_query_review": "fact",
+                "global_query_review_history": "dimension"
+            },
+            "get": {
+                "table_fields": [
+                    "checksum"
+                ],
+                "dimension-hostname_max": [
+                    "a",
+                    "b"
+                ],
+                "fact-reviewed_status": "",
+                "dimension-ts_min_start": "",
+                "dimension-ts_min_end": "yesterday",
+                "fact-where": "0"
+            },
+            "name": "blank and array values",
+            "now": "2026-11-27 11:42:12"
+        },
+        "expected": {
+            "form_fields": [
+                "fact-group",
+                "fact-order",
+                "fact-having",
+                "fact-limit",
+                "fact-first_seen",
+                "fact-where",
+                "fact-sample",
+                "fact-checksum",
+                "fact-reviewed_status",
+                "dimension-extra_fields",
+                "dimension-hostname_max",
+                "dimension-ts_min",
+                "dimension-pivot-hostname_max",
+                "dimension-pivot-checksum"
+            ],
+            "custom_fields": [
+                "checksum",
+                "date",
+                "hour",
+                "hour_ts",
+                "minute_ts",
+                "minute",
+                "snippet",
+                "index_ratio",
+                "query_time_avg",
+                "rows_sent_avg"
+            ],
+            "sql": "SELECT checksum AS `checksum`\n FROM `global_query_review` AS `fact` \n JOIN `global_query_review_history` AS `dimension` USING (`checksum`) \n WHERE dimension.hostname_max = \"Array\"\n  AND dimension.ts_min <= \"yesterday\"\n AND (0) ",
+            "columns": [
+                "checksum"
+            ],
+            "search_uri": "fact-where=0&dimension-hostname_max=&dimension-ts_min_end=yesterday&table_fields%5B%5D=checksum",
+            "search_uri_except": "fact-where=0&dimension-hostname_max=&table_fields%5B%5D=checksum"
+        }
+    },
+    {
+        "input": {
+            "report": "slow_query_log",
+            "tables": {
+                "global_query_review": "fact",
+                "global_query_review_history": "dimension"
+            },
+            "get": {
+                "table_fields": [
+                    "checksum"
+                ],
+                "dimension-ts_min_start": "-1 month",
+                "dimension-ts_min_end": "now",
+                "fact-first_seen": "-7 day"
+            },
+            "name": "relative dates",
+            "now": "2026-11-27 11:42:12"
+        },
+        "expected": {
+            "form_fields": [
+                "fact-group",
+                "fact-order",
+                "fact-having",
+                "fact-limit",
+                "fact-first_seen",
+                "fact-where",
+                "fact-sample",
+                "fact-checksum",
+                "fact-reviewed_status",
+                "dimension-extra_fields",
+                "dimension-hostname_max",
+                "dimension-ts_min",
+                "dimension-pivot-hostname_max",
+                "dimension-pivot-checksum"
+            ],
+            "custom_fields": [
+                "checksum",
+                "date",
+                "hour",
+                "hour_ts",
+                "minute_ts",
+                "minute",
+                "snippet",
+                "index_ratio",
+                "query_time_avg",
+                "rows_sent_avg"
+            ],
+            "sql": "SELECT checksum AS `checksum`\n FROM `global_query_review` AS `fact` \n JOIN `global_query_review_history` AS `dimension` USING (`checksum`) \n WHERE fact.first_seen >= \"2026-11-20 11:42:12\"\n  AND dimension.ts_min >= \"2026-10-27 11:42:12\"\n  AND dimension.ts_min <= \"2026-11-27 11:42:12\"\n",
+            "columns": [
+                "checksum"
+            ],
+            "search_uri": "fact-first_seen=-7+day&dimension-ts_min_start=-1+month&dimension-ts_min_end=now&table_fields%5B%5D=checksum",
+            "search_uri_except": "fact-first_seen=-7+day&table_fields%5B%5D=checksum"
+        }
+    },
+    {
+        "input": {
+            "report": "slow_query_log",
+            "tables": {
+                "global_query_review": "fact",
+                "global_query_review_history": "dimension"
+            },
+            "get": {
+                "table_fields": [
+                    "dimension.ts_min",
+                    "ts_max",
+                    "Query_time_sum"
+                ]
+            },
+            "non_aggregate": [
+                "ts_min",
+                "ts_max"
+            ],
+            "name": "non aggregate columns",
+            "now": "2026-11-27 11:42:12"
+        },
+        "expected": {
+            "form_fields": [
+                "fact-group",
+                "fact-order",
+                "fact-having",
+                "fact-limit",
+                "fact-first_seen",
+                "fact-where",
+                "fact-sample",
+                "fact-checksum",
+                "fact-reviewed_status",
+                "dimension-extra_fields",
+                "dimension-hostname_max",
+                "dimension-ts_min",
+                "dimension-pivot-hostname_max",
+                "dimension-pivot-checksum"
+            ],
+            "custom_fields": [
+                "checksum",
+                "date",
+                "hour",
+                "hour_ts",
+                "minute_ts",
+                "minute",
+                "snippet",
+                "index_ratio",
+                "query_time_avg",
+                "rows_sent_avg"
+            ],
+            "sql": "SELECT dimension.ts_min,\n  ts_max,\n  SUM(Query_time_sum) AS `Query_time_sum`\n FROM `global_query_review` AS `fact` \n JOIN `global_query_review_history` AS `dimension` USING (`checksum`) \n",
+            "columns": [
+                "ts_min",
+                "ts_max",
+                "Query_time_sum"
+            ],
+            "search_uri": "table_fields%5B%5D=dimension.ts_min&table_fields%5B%5D=ts_max&table_fields%5B%5D=Query_time_sum",
+            "search_uri_except": "table_fields%5B%5D=dimension.ts_min&table_fields%5B%5D=ts_max&table_fields%5B%5D=Query_time_sum"
+        }
+    },
+    {
+        "input": {
+            "report": "slow_query_log",
+            "tables": {
+                "global_query_review": "fact",
+                "global_query_review_history": "dimension"
+            },
+            "get": {
+                "fact-group": "checksum"
+            },
+            "name": "no fields selected",
+            "now": "2026-11-27 11:42:12"
+        },
+        "expected": {
+            "form_fields": [
+                "fact-group",
+                "fact-order",
+                "fact-having",
+                "fact-limit",
+                "fact-first_seen",
+                "fact-where",
+                "fact-sample",
+                "fact-checksum",
+                "fact-reviewed_status",
+                "dimension-extra_fields",
+                "dimension-hostname_max",
+                "dimension-ts_min",
+                "dimension-pivot-hostname_max",
+                "dimension-pivot-checksum"
+            ],
+            "custom_fields": [
+                "checksum",
+                "date",
+                "hour",
+                "hour_ts",
+                "minute_ts",
+                "minute",
+                "snippet",
+                "index_ratio",
+                "query_time_avg",
+                "rows_sent_avg"
+            ],
+            "error": "No fields selected"
+        }
+    },
+    {
+        "input": {
+            "report": "slow_query_log",
+            "tables": {
+                "global_query_review": "fact",
+                "global_query_review_history": "dimension"
+            },
+            "get": {
+                "table_fields": []
+            },
+            "name": "empty field list",
+            "now": "2026-11-27 11:42:12"
+        },
+        "expected": {
+            "form_fields": [
+                "fact-group",
+                "fact-order",
+                "fact-having",
+                "fact-limit",
+                "fact-first_seen",
+                "fact-where",
+                "fact-sample",
+                "fact-checksum",
+                "fact-reviewed_status",
+                "dimension-extra_fields",
+                "dimension-hostname_max",
+                "dimension-ts_min",
+                "dimension-pivot-hostname_max",
+                "dimension-pivot-checksum"
+            ],
+            "custom_fields": [
+                "checksum",
+                "date",
+                "hour",
+                "hour_ts",
+                "minute_ts",
+                "minute",
+                "snippet",
+                "index_ratio",
+                "query_time_avg",
+                "rows_sent_avg"
+            ],
+            "error": "No fields selected"
+        }
+    },
+    {
+        "input": {
+            "report": "slow_query_log",
+            "tables": {
+                "global_query_review": "fact",
+                "global_query_review_history": "dimension"
+            },
+            "get": {
+                "table_fields": [
+                    "checksum"
+                ],
+                "fact-limit": "10"
+            },
+            "post": {
+                "fact-limit": "5",
+                "fact-reviewed_status": "good"
+            },
+            "name": "post overrides get",
+            "now": "2026-11-27 11:42:12"
+        },
+        "expected": {
+            "form_fields": [
+                "fact-group",
+                "fact-order",
+                "fact-having",
+                "fact-limit",
+                "fact-first_seen",
+                "fact-where",
+                "fact-sample",
+                "fact-checksum",
+                "fact-reviewed_status",
+                "dimension-extra_fields",
+                "dimension-hostname_max",
+                "dimension-ts_min",
+                "dimension-pivot-hostname_max",
+                "dimension-pivot-checksum"
+            ],
+            "custom_fields": [
+                "checksum",
+                "date",
+                "hour",
+                "hour_ts",
+                "minute_ts",
+                "minute",
+                "snippet",
+                "index_ratio",
+                "query_time_avg",
+                "rows_sent_avg"
+            ],
+            "sql": "SELECT checksum AS `checksum`\n FROM `global_query_review` AS `fact` \n JOIN `global_query_review_history` AS `dimension` USING (`checksum`) \n WHERE fact.reviewed_status = \"good\"\n LIMIT 5 \n",
+            "columns": [
+                "checksum"
+            ],
+            "search_uri": "fact-limit=5&fact-reviewed_status=good&table_fields%5B%5D=checksum",
+            "search_uri_except": "fact-limit=5&fact-reviewed_status=good&table_fields%5B%5D=checksum"
+        }
+    },
+    {
+        "input": {
+            "report": "performance_schema",
+            "tables": {
+                "events_statements_summary_by_digest": "fact"
+            },
+            "get": {
+                "fact-order": "SUM_TIMER_WAIT DESC",
+                "fact-limit": "20",
+                "fact-group": "DIGEST",
+                "table_fields": [
+                    "DIGEST",
+                    "snippet",
+                    "index_ratio",
+                    "COUNT_STAR",
+                    "SUM_TIMER_WAIT",
+                    "SUM_LOCK_TIME",
+                    "SUM_ROWS_AFFECTED",
+                    "SUM_ROWS_SENT",
+                    "SUM_ROWS_EXAMINED",
+                    "SUM_CREATED_TMP_TABLES",
+                    "SUM_SORT_SCAN",
+                    "SUM_NO_INDEX_USED"
+                ],
+                "fact-first_seen_start": "2024-03-01 00:00:00",
+                "fact-DIGEST_TEXT": "select"
+            },
+            "name": "performance schema",
+            "now": "2026-11-27 11:42:12"
+        },
+        "expected": {
+            "form_fields": [
+                "fact-order",
+                "fact-having",
+                "fact-limit",
+                "fact-first_seen",
+                "fact-where",
+                "fact-DIGEST",
+                "fact-DIGEST_TEXT",
+                "fact-group"
+            ],
+            "custom_fields": [
+                "snippet",
+                "index_ratio",
+                "rows_sent_avg"
+            ],
+            "sql": "SELECT DIGEST,\n  LEFT(fact.DIGEST_TEXT,20) AS `snippet`,\n  ROUND(SUM_ROWS_EXAMINED/SUM_ROWS_SENT,2) AS `index_ratio`,\n  SUM(COUNT_STAR) AS `COUNT_STAR`,\n  SUM(SUM_TIMER_WAIT) AS `SUM_TIMER_WAIT`,\n  SUM(SUM_LOCK_TIME) AS `SUM_LOCK_TIME`,\n  SUM(SUM_ROWS_AFFECTED) AS `SUM_ROWS_AFFECTED`,\n  SUM(SUM_ROWS_SENT) AS `SUM_ROWS_SENT`,\n  SUM(SUM_ROWS_EXAMINED) AS `SUM_ROWS_EXAMINED`,\n  SUM(SUM_CREATED_TMP_TABLES) AS `SUM_CREATED_TMP_TABLES`,\n  SUM(SUM_SORT_SCAN) AS `SUM_SORT_SCAN`,\n  SUM(SUM_NO_INDEX_USED) AS `SUM_NO_INDEX_USED`\n FROM `events_statements_summary_by_digest` AS `fact` \n WHERE fact.first_seen >= \"2024-03-01 00:00:00\"\n  AND fact.DIGEST_TEXT LIKE \"%select%\"\n GROUP BY DIGEST \n ORDER BY SUM_TIMER_WAIT DESC \n LIMIT 20 \n",
+            "columns": [
+                "DIGEST",
+                "snippet",
+                "index_ratio",
+                "COUNT_STAR",
+                "SUM_TIMER_WAIT",
+                "SUM_LOCK_TIME",
+                "SUM_ROWS_AFFECTED",
+                "SUM_ROWS_SENT",
+                "SUM_ROWS_EXAMINED",
+                "SUM_CREATED_TMP_TABLES",
+                "SUM_SORT_SCAN",
+                "SUM_NO_INDEX_USED"
+            ],
+            "search_uri": "fact-order=SUM_TIMER_WAIT+DESC&fact-limit=20&fact-first_seen_start=2024-03-01+00%3A00%3A00&fact-DIGEST_TEXT=select&fact-group=DIGEST&table_fields%5B%5D=DIGEST&table_fields%5B%5D=snippet&table_fields%5B%5D=index_ratio&table_fields%5B%5D=COUNT_STAR&table_fields%5B%5D=SUM_TIMER_WAIT&table_fields%5B%5D=SUM_LOCK_TIME&table_fields%5B%5D=SUM_ROWS_AFFECTED&table_fields%5B%5D=SUM_ROWS_SENT&table_fields%5B%5D=SUM_ROWS_EXAMINED&table_fields%5B%5D=SUM_CREATED_TMP_TABLES&table_fields%5B%5D=SUM_SORT_SCAN&table_fields%5B%5D=SUM_NO_INDEX_USED",
+            "search_uri_except": "fact-order=SUM_TIMER_WAIT+DESC&fact-limit=20&fact-first_seen_start=2024-03-01+00%3A00%3A00&fact-DIGEST_TEXT=select&fact-group=DIGEST&table_fields%5B%5D=DIGEST&table_fields%5B%5D=snippet&table_fields%5B%5D=index_ratio&table_fields%5B%5D=COUNT_STAR&table_fields%5B%5D=SUM_TIMER_WAIT&table_fields%5B%5D=SUM_LOCK_TIME&table_fields%5B%5D=SUM_ROWS_AFFECTED&table_fields%5B%5D=SUM_ROWS_SENT&table_fields%5B%5D=SUM_ROWS_EXAMINED&table_fields%5B%5D=SUM_CREATED_TMP_TABLES&table_fields%5B%5D=SUM_SORT_SCAN&table_fields%5B%5D=SUM_NO_INDEX_USED"
+        }
+    },
+    {
+        "input": {
+            "report": "performance_schema_history",
+            "tables": {
+                "events_statements": "fact",
+                "events_statements_history": "dimension"
+            },
+            "get": {
+                "fact-group": "minute_ts",
+                "fact-order": "minute_ts",
+                "fact-limit": "",
+                "dimension-FIRST_SEEN_start": "2024-03-24 10:00:00",
+                "dimension-FIRST_SEEN_end": "2024-03-31 10:00:00",
+                "table_fields": [
+                    "minute_ts",
+                    "SUM_TIMER_WAIT"
+                ],
+                "plot_field": "SUM_TIMER_WAIT",
+                "dimension-pivot-hostname": "SUM_TIMER_WAIT"
+            },
+            "pivot": {
+                "dimension-pivot-hostname": [
+                    "h1",
+                    "h2"
+                ]
+            },
+            "uri_exceptions": [
+                "dimension-FIRST_SEEN"
+            ],
+            "name": "performance schema history graph",
+            "now": "2026-11-27 11:42:12"
+        },
+        "expected": {
+            "form_fields": [
+                "fact-group",
+                "fact-order",
+                "fact-having",
+                "fact-limit",
+                "fact-first_seen",
+                "fact-where",
+                "fact-DIGEST_TEXT",
+                "fact-DIGEST",
+                "fact-reviewed_status",
+                "dimension-extra_fields",
+                "dimension-hostname",
+                "dimension-FIRST_SEEN",
+                "dimension-pivot-hostname"
+            ],
+            "custom_fields": [
+                "date",
+                "snippet",
+                "index_ratio",
+                "rows_sent_avg",
+                "hour",
+                "hour_ts",
+                "minute_ts",
+                "minute"
+            ],
+            "sql": "SELECT round(unix_timestamp(substring(dimension.FIRST_SEEN,1,16))) AS `minute_ts`,\n  SUM(SUM_TIMER_WAIT) AS `SUM_TIMER_WAIT`,\n  SUM(IF(dimension.hostname='h1',SUM_TIMER_WAIT,0)) AS `h1`,\n  SUM(IF(dimension.hostname='h2',SUM_TIMER_WAIT,0)) AS `h2`\n FROM `events_statements` AS `fact` \n JOIN `events_statements_history` AS `dimension` USING (`DIGEST`) \n WHERE dimension.FIRST_SEEN >= \"2024-03-24 10:00:00\"\n  AND dimension.FIRST_SEEN <= \"2024-03-31 10:00:00\"\n GROUP BY minute_ts \n ORDER BY minute_ts \n",
+            "columns": [
+                "minute_ts",
+                "SUM_TIMER_WAIT",
+                "h1",
+                "h2"
+            ],
+            "search_uri": "fact-group=minute_ts&fact-order=minute_ts&dimension-FIRST_SEEN_start=2024-03-24+10%3A00%3A00&dimension-FIRST_SEEN_end=2024-03-31+10%3A00%3A00&dimension-pivot-hostname=SUM_TIMER_WAIT&table_fields%5B%5D=minute_ts&table_fields%5B%5D=SUM_TIMER_WAIT",
+            "search_uri_except": "fact-group=minute_ts&fact-order=minute_ts&dimension-pivot-hostname=SUM_TIMER_WAIT&table_fields%5B%5D=minute_ts&table_fields%5B%5D=SUM_TIMER_WAIT"
+        }
+    },
+    {
+        "input": {
+            "report": "performance_schema",
+            "tables": {
+                "events_statements": "fact",
+                "events_statements_history": "dimension"
+            },
+            "get": {
+                "table_fields": [
+                    "DIGEST"
+                ]
+            },
+            "name": "unknown join alias",
+            "now": "2026-11-27 11:42:12"
+        },
+        "expected": {
+            "form_fields": [
+                "fact-order",
+                "fact-having",
+                "fact-limit",
+                "fact-first_seen",
+                "fact-where",
+                "fact-DIGEST",
+                "fact-DIGEST_TEXT",
+                "fact-group"
+            ],
+            "custom_fields": [
+                "snippet",
+                "index_ratio",
+                "rows_sent_avg"
+            ],
+            "sql": "SELECT DIGEST\n FROM `events_statements` AS `fact` \n JOIN `events_statements_history` AS `dimension`  \n",
+            "columns": [
+                "DIGEST"
+            ],
+            "search_uri": "table_fields%5B%5D=DIGEST",
+            "search_uri_except": "table_fields%5B%5D=DIGEST"
+        }
+    }
+]

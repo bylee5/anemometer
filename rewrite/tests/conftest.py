@@ -11,6 +11,17 @@ from typing import Any
 import pytest
 
 GOLDEN_DIR = Path(__file__).parent / "golden"
+INSTALL_SQL = Path(__file__).parents[2] / "install.sql"
+
+
+def load_schema(connection, path=INSTALL_SQL):
+    """Run the CREATE TABLE statements of install.sql (it creates its own database)."""
+    lines = path.read_text(encoding="utf-8").splitlines()
+    sql = "\n".join(line for line in lines if not line.lstrip().startswith("--"))
+    for statement in sql.split(";"):
+        statement = statement.strip()
+        if statement.upper().startswith("CREATE TABLE"):
+            connection.execute(statement)
 
 
 @pytest.fixture(scope="session")
